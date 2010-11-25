@@ -1,0 +1,55 @@
+Dies ist libjit.info, hergestellt von Makeinfo Version 4.8 aus
+libjit.texi.
+
+INFO-DIR-SECTION Libraries
+START-INFO-DIR-ENTRY
+* Libjit: (libjit).                Just-In-Time Compiler Library
+END-INFO-DIR-ENTRY
+
+   The libjit library assists with the process of building Just-In-Time
+compilers for languages, virtual machines, and emulators.
+
+   Copyright (C) 2004 Southern Storm Software, Pty Ltd
+
+
+Indirect:
+libjit.info-1: 397
+libjit.info-2: 259099
+
+Tag Table:
+(Indirect)
+Node: Top397
+Node: Introduction1611
+Node: Features5798
+Node: Tutorials7362
+Node: Tutorial 18189
+Node: Tutorial 214292
+Node: Tutorial 317928
+Node: Tutorial 421542
+Node: Tutorial 525045
+Node: Dynamic Pascal26546
+Node: Initialization32277
+Node: Functions40775
+Node: Types55445
+Node: Values75597
+Node: Instructions87906
+Node: Basic Blocks124041
+Node: Intrinsics127422
+Node: Exceptions157675
+Node: Breakpoint Debugging163365
+Node: ELF Binaries176629
+Node: Utility Routines183829
+Node: Diagnostic Routines205445
+Node: C++ Interface206677
+Node: C++ Contexts207187
+Node: C++ Values208384
+Node: C++ Functions213011
+Node: Porting233011
+Node: Porting Apply233985
+Node: Instruction Generation237278
+Node: Architecture Rules238810
+Node: Register Allocation254049
+Node: Why GPL?257127
+Node: Index259099
+
+End Tag Table
