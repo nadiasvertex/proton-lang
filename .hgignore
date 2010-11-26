@@ -6,4 +6,5 @@ syntax: glob
 *.texi
 deps/*
 */dpas/*
-
+proton_test
+proton

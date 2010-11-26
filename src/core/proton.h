@@ -8,6 +8,8 @@
 #include "function.h"
 #include "sequence.h"
 #include "integer.h"
+#include "exception.h"
 
 #include "protocol.h"
+#include "jitter.h"
 #endif

@@ -3,6 +3,8 @@
 
 #include "integer_test.h"
 #include "sequence_protocol_test.h"
+#include "number_protocol_test.h"
+#include "context_test.h"
 
 using namespace igloo;
 

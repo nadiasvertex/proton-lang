@@ -5,9 +5,11 @@
 
 namespace proton {
 
-class sequence : public object {
+class sequence: public object {
 public:
-	virtual bool is_sequence() { return true; }
+	virtual bool is_sequence() {
+		return true;
+	}
 
 	virtual uint64 len() {
 		return 0;

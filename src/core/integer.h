@@ -1,12 +1,14 @@
 #ifndef PROTO_INTEGER_H_
 #define PROTO_INTEGER_H_
 
-#include "core-internal.h"
 #include <gmp.h>
+
+#include "core-internal.h"
+#include "number.h"
 
 namespace proton {
 
-class integer: public object {
+class integer: public number {
 	mpz_t value;
 public:
 

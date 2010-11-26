@@ -12,7 +12,15 @@ jit_type_t python_fn_sig_parms[1] = { jit_type_void_ptr };
 jit_type_t python_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr,
 		python_fn_sig_parms, 1, 1);
 
+/// The parameter signature for a query message
+jit_type_t query_fn_sig_parms[1] = { jit_type_void_ptr };
+
+/// The function signature for a Python function
+jit_type_t query_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_sys_bool,
+		query_fn_sig_parms, 1, 1);
+
 class function: public gc {
+	friend class jitter;
 
 	/// The proton context for this function
 	context *ctx;

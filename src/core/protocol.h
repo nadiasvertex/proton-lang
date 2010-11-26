@@ -18,7 +18,7 @@ extern "C" {
 /// Returns the length of the object, if the object
 /// implements the sequence protocol.  Otherwise,
 /// returns 0.
-proton::object* proto_len(proton::object *o) {
+proton::object* proto_len(proton::object* o) {
 	if (o->is_sequence()) {
 
 		auto seq = (proton::sequence*) o;
@@ -41,7 +41,13 @@ proton::object* proto_new_int(proton::object *o, proton::int32 v) {
 // Query protocol operations
 
 bool proto_is_sequence_type(proton::object *o) {
-	return o->is_sequence();
+	if (!o->is_sequence())
+	{
+		jit_exception_throw(new proton::exception());
+		return false;
+	}
+
+	return true;
 }
 
 bool proto_is_number_type(proton::object *o) {
