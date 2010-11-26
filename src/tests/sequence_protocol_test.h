@@ -16,7 +16,7 @@ Context(NormalSystemState)
 	{
 		auto n = new proton::integer(5);
 
-		Assert::That(proto_is_sequence_type(n), Is().Not().EqualTo(true));
+		Assert::That(proto_is_sequence_type(n), Is().EqualTo(false));
 	}
 
 };
