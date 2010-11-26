@@ -18,11 +18,11 @@ proton::object* proto_len(proton::object *o) {
 	if (typeid(*o) == typeid(proton::sequence)) {
 
 		auto seq = (proton::sequence*)o;
-		auto value = seq->len();
 
+		return integer(seq->len());
 	}
 
-	return 0;
+	return integer(0);
 }
 
 }
