@@ -14,6 +14,16 @@ public:
 		return reinterpret_cast<uint64> (this);
 	}
 
+	/// Returns true if the object is a sequence.
+	virtual bool is_sequence() {
+		return false;
+	}
+
+	/// Returns true if the object is a number.
+	virtual bool is_number() {
+		return false;
+	}
+
 };
 
 // The garbage collecting allocator for objects, used

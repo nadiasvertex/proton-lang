@@ -4,11 +4,14 @@
 #include "core-internal.h"
 #include <gmp.h>
 
-namespace proto {
+namespace proton {
 
-class integer: public gc {
+class integer: public object {
 	mpz_t value;
 public:
+
+	/// Should be used when a zero integer is desired.
+	static integer *zero;
 
 	integer() {
 		mpz_init(value);
@@ -36,6 +39,9 @@ public:
 	}
 
 };
+
+/// Assign this to its one and only value.
+integer* integer::zero = new integer();
 
 }
 

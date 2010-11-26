@@ -1,8 +1,6 @@
 #ifndef PROTON_PROTOCOL_H_
 #define PROTON_PROTOCOL_H_
 
-#include <typeinfo>
-
 /*
  * The protocol is the external representation of the Python system that can
  * be used by other programs or languages to interact with the runtime.  This
@@ -11,18 +9,43 @@
  *
  */
 
-
 extern "C" {
 
+//===---------------------------------------------------------------------====//
+// Unary protocol operations
+
+
+/// Returns the length of the object, if the object
+/// implements the sequence protocol.  Otherwise,
+/// returns 0.
 proton::object* proto_len(proton::object *o) {
-	if (typeid(*o) == typeid(proton::sequence)) {
+	if (o->is_sequence()) {
 
-		auto seq = (proton::sequence*)o;
+		auto seq = (proton::sequence*) o;
 
-		return integer(seq->len());
+		return new proton::integer(seq->len());
 	}
 
-	return integer(0);
+	return proton::integer::zero;
+}
+
+//===---------------------------------------------------------------------====//
+// Conversion protocol operations
+
+proton::object* proto_new_int(proton::object *o, proton::int32 v) {
+	return new proton::integer(v);
+}
+
+
+//===---------------------------------------------------------------------====//
+// Query protocol operations
+
+bool proto_is_sequence_type(proton::object *o) {
+	return o->is_sequence();
+}
+
+bool proto_is_number_type(proton::object *o) {
+	return o->is_number();
 }
 
 }
