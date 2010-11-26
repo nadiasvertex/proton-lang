@@ -1,0 +1,8 @@
+syntax: glob
+*.o
+*.a
+*.la
+*.lo
+*.texi
+deps/*
+*/dpas/*

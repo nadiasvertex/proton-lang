@@ -5,7 +5,7 @@ cd ..
 
 # Compile garbage collector
 cd gc-7.1
-sh configure --enable-threads --enable-parallel-mark --disable-shared --enable-static --with-pic --enable-redirect-malloc --enable-dependency-tracking --enable-cplusplus --disable-gcj-support --disable-java-finalization && make clean && make all
+sh configure --enable-threads=pthreads --enable-parallel-mark --disable-shared --enable-static --with-pic --enable-dependency-tracking --enable-cplusplus --disable-gcj-support --disable-java-finalization && make clean && make all
 cd ..
 
 # Compile GNU multiprecision library
