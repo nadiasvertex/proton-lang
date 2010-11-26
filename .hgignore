@@ -6,3 +6,4 @@ syntax: glob
 *.texi
 deps/*
 */dpas/*
+

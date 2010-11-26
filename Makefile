@@ -4,8 +4,8 @@ SHELL_OBJS = main.o
 #CORE_SRC   = src/core
 #CORE_OBJS  = 
 
-LIBS = -Ldeps/gc-7.1/.libs  -lgc -lgccpp -lpthread -ldl
-INCLUDES = -Isrc/core -Ideps/gc-7.1/include
+LIBS = -Ldeps/gc-7.1/.libs -Ldeps/libjit-0.1.0/.libs -ljit -lgc -lgccpp -lpthread -ldl
+INCLUDES = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.0/include
 
 VPATH = $(SHELL_SRC)
 
@@ -16,8 +16,7 @@ all: proton
 
 clean:
 	rm -f *.o
-	rm -f proton
-	
+	rm -f proton	
 
 proton: $(SHELL_OBJS)
 	g++ -oproton  $< $(LIBS)
