@@ -29,10 +29,6 @@ public:
 		jit_function_create(ctx->jit_ctx(), python_fn_sig);
 	}
 
-	/*~function() {
-		::jit_function_destroy(jit);
-	}*/
-
 	/// Compiles the function - must be run before executing it.
 	void compile() {
 		context::lock lck();
@@ -41,8 +37,14 @@ public:
 	}
 
 	/// Allows you to "manually" execute the function.
-	void apply() {
+	closure* apply(closure* c) {
 
+		void * args[1] = {c};
+		closure *result;
+
+		jit_function_apply(jit, args, &result);
+
+		return result;
 	}
 
 };

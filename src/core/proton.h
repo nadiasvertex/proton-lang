@@ -6,5 +6,8 @@
 #include "object.h"
 #include "closure.h"
 #include "function.h"
+#include "sequence.h"
+#include "integer.h"
 
+#include "protocol.h"
 #endif
