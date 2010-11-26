@@ -10,9 +10,15 @@ namespace proton {
 class object {
 
 public:
-
+	uint64 id() {
+		return reinterpret_cast<uint64> (this);
+	}
 
 };
+
+// The garbage collecting allocator for objects, used
+// with the STL allocator classes.
+typedef gc_allocator<object *> object_allocator;
 
 }
 

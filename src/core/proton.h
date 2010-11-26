@@ -3,5 +3,8 @@
 
 #include "init.h"
 #include "context.h"
+#include "object.h"
+#include "closure.h"
+#include "function.h"
 
 #endif

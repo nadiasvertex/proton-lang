@@ -24,11 +24,11 @@ public:
 	}
 
 	void build_start() {
-		jit_context_build_start(jit);
+		::jit_context_build_start(jit);
 	}
 
 	void build_end() {
-		jit_context_build_end(jit);
+		::jit_context_build_end(jit);
 	}
 
 	// Handles automatic locking and unlocking of the context,
@@ -45,12 +45,9 @@ public:
 		~lock() {
 			ctx->build_end();
 		}
-	}
+	};
 
 };
-
-}
-;
 
 }
 

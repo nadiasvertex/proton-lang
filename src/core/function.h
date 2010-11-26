@@ -6,10 +6,10 @@
 namespace proton {
 
 /// The parameter signature for a Python function
-jit_type_t python_fn_sig_parms[1] = { jit_type_ptr };
+jit_type_t python_fn_sig_parms[1] = { jit_type_void_ptr };
 
 /// The function signature for a Python function
-jit_type_t python_fn_sig = jit_signature_create(jit_abi_cdecl, jit_type_ptr,
+jit_type_t python_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr,
 		python_fn_sig_parms, 1, 1);
 
 class function: public gc {
@@ -29,9 +29,9 @@ public:
 		jit_function_create(ctx->jit_ctx(), python_fn_sig);
 	}
 
-	~function() {
-		jit_function_destroy(jit);
-	}
+	/*~function() {
+		::jit_function_destroy(jit);
+	}*/
 
 	/// Compiles the function - must be run before executing it.
 	void compile() {

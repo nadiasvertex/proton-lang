@@ -4,6 +4,7 @@
 #include <jit/jit.h>
 #include <gc.h>
 #include <gc_cpp.h>
+#include <gc_allocator.h>
 
 namespace proton {
 typedef unsigned char uint8;
@@ -18,6 +19,7 @@ typedef long long int64;
 
 typedef float float32;
 typedef double float64;
+
 }
 
 #endif
