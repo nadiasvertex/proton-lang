@@ -40,8 +40,8 @@ public:
 		jit_function_compile(jit);
 	}
 
+	/// Allows you to "manually" execute the function.
 	void apply() {
-
 
 	}
 
