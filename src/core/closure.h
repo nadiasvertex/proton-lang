@@ -4,7 +4,7 @@
 #include "core-internal.h"
 #include "object.h"
 
-#include <list>
+#include <vector>
 #include <map>
 #include <string>
 
@@ -15,16 +15,25 @@ namespace proton {
 /// we should go next.
 class closure: public gc {
 
-	/// The positional input paramters
-	std::list<object*, object_allocator> positional;
-
-	/// The extra input parameters.
-	std::list<object*, object_allocator> varargs;
+	/// The positional input parameters
+	std::vector<object*, object_allocator> positional;
 
 	/// The keyword parameters.
-	std::map<std::wstring, object *, object_allocator> keyword;
+	std::map<std::wstring, object *> keyword;
 
 public:
+	void append(object *o) {
+		positional.push_back(o);
+	}
+
+	void assign(std::wstring n, object *o) {
+		keyword[n] = o;
+	}
+
+	object*  at(uint32 idx) {
+		return positional[idx];
+	}
+
 
 };
 

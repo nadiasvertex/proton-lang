@@ -24,10 +24,14 @@ public:
 		return false;
 	}
 
+	static object *none;
 };
 
-// The garbage collecting allocator for objects, used
-// with the STL allocator classes.
+/// The one and only None object.
+object* object::none = new object();
+
+/// The garbage collecting allocator for objects, used
+/// with the STL allocator classes.
 typedef gc_allocator<object *> object_allocator;
 
 }

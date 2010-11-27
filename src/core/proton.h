@@ -4,6 +4,7 @@
 #include "init.h"
 #include "context.h"
 #include "object.h"
+#include "namespace.h"
 #include "closure.h"
 #include "function.h"
 #include "sequence.h"

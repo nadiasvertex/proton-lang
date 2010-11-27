@@ -1,7 +1,7 @@
 #ifndef __PROTON_INIT_H__
 #define __PROTON_INIT_H__
 
-#include <gc.h>
+#include "core-internal.h"
 #include <gmp.h>
 
 namespace proton {
@@ -24,6 +24,7 @@ class bootstrapper {
 private:
 	void do_init() {
 		GC_INIT();
+		jit_init();
 
 		mp_set_memory_functions(&gmp_alloc_hook, &gmp_realloc_hook, &gmp_free_hook);
 	}

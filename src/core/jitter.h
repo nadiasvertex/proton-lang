@@ -23,14 +23,19 @@ public:
 		f(_f) {
 	}
 
+	/// Provides locking routines that avoid corruption of the jit context.
+	/// Also disables garbage collection so that finalization routines are
+	/// not run until the build is finished.
 	void start() {
+		GC_disable();
 		f->ctx->build_start();
 	}
 
+	/// Unlocks the jit context and re-enables garbage collection.
 	void end() {
 		f->ctx->build_end();
+		GC_enable();
 	}
-
 
 	/// Generates a constant value that holds a pointer.   This can be used as
 	/// input to other instructions.
