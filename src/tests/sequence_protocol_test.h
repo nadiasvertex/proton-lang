@@ -18,13 +18,16 @@ Context(NormalSequences)
 		auto f = new proton::function(ctx);
 
 		auto j = new proton::jitter(f);
-
 		auto n = new proton::integer(5);
-		auto v = jit_value_create_nint_constant(f->jit_fn(), jit_type_void_ptr, (jit_nint)n);
+
+		j->start();
+
+		auto v = j->ld_constant_pointer(n);
 
 		j->is_sequence(v);
+		f->compile();
 
-		f.compile();
+		j->end();
 	}
 
 };

@@ -16,19 +16,32 @@ struct debuginfo {
 	std::wstring filename;
 };
 
-class jitter {
+class jitter : public gc {
 	function *f;
 public:
 	jitter(function *_f) :
 		f(_f) {
 	}
 
+	void start() {
+		f->ctx->build_start();
+	}
+
+	void end() {
+		f->ctx->build_end();
+	}
+
+
+	/// Generates a constant value that holds a pointer.   This can be used as
+	/// input to other instructions.
+	jit_value_t ld_constant_pointer(void *p) {
+		return jit_value_create_nint_constant(f->jit, jit_type_void_ptr, (jit_nint)p);
+	}
+
 	/// Sends an "is_sequence" message.  The message is sent to the
 	/// object represented by the jit value type in o. Throws an
 	/// exception if the object is _not_ a sequence type.
 	jit_value_t is_sequence(jit_value_t o) {
-		context::lock lck(f->ctx);
-
 		jit_value_t args[1] = { o };
 
 		auto result = jit_insn_call_native(f->jit, "proto_is_sequence",
