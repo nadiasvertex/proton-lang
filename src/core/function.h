@@ -37,6 +37,10 @@ public:
 		jit_function_create(ctx->jit_ctx(), python_fn_sig);
 	}
 
+	jit_function_t jit_fn() {
+		return jit;
+	}
+
 	/// Compiles the function - must be run before executing it.
 	void compile() {
 		context::lock lck();

@@ -1,10 +1,3 @@
-/*
- * sequence_protocol_test.h
- *
- *  Created on: Nov 26, 2010
- *      Author: cnelson
- */
-
 #ifndef SEQUENCE_PROTOCOL_TEST_H_
 #define SEQUENCE_PROTOCOL_TEST_H_
 
@@ -26,8 +19,10 @@ Context(NormalSequences)
 
 		auto j = new proton::jitter(f);
 
+		auto n = new proton::integer(5);
+		auto v = jit_value_create_nint_constant(f->jit_fn(), jit_type_void_ptr, n);
 
-		//j->is_sequence(0);
+		j->is_sequence(v);
 	}
 
 };
