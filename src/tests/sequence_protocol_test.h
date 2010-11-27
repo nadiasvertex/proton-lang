@@ -23,6 +23,8 @@ Context(NormalSequences)
 		auto v = jit_value_create_nint_constant(f->jit_fn(), jit_type_void_ptr, (jit_nint)n);
 
 		j->is_sequence(v);
+
+		f.compile();
 	}
 
 };
