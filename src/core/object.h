@@ -1,6 +1,11 @@
 #ifndef PROTON_OBJECT_H_
 #define PROTON_OBJECT_H_
 
+#include <functional>
+#include <string>
+#include <map>
+
+
 #include "core-internal.h"
 
 namespace proton {
@@ -34,6 +39,11 @@ object* object::none = new object();
 /// with the STL allocator classes.
 typedef gc_allocator<object *> object_allocator;
 
+typedef gc_allocator<std::pair<std::wstring, object*>> named_object_allocator;
+
+typedef std::map<std::wstring, object *, std::less<std::wstring>, named_object_allocator> object_map;
+
+typedef std::vector<object*, object_allocator> object_vector;
 }
 
 #endif /* OBJECT_H_ */

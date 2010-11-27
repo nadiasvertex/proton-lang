@@ -5,8 +5,6 @@
 #include "object.h"
 
 #include <vector>
-#include <map>
-#include <string>
 
 namespace proton {
 
@@ -14,27 +12,16 @@ namespace proton {
 /// contains all of the input and output values, as well as a value that indicates where
 /// we should go next.
 class closure: public gc {
-
+public:
 	/// The positional input parameters
-	std::vector<object*, object_allocator> positional;
+	object_vector positional;
 
 	/// The keyword parameters.
-	std::map<std::wstring, object *> keyword;
+	object_map keyword;
 
-public:
-	void append(object *o) {
-		positional.push_back(o);
-	}
-
-	void assign(std::wstring n, object *o) {
-		keyword[n] = o;
-	}
-
-	object*  at(uint32 idx) {
-		return positional[idx];
-	}
-
-
+	/// If this is a call to a member function, we need to bind self.
+	/// The parent field contains the value that would be bound to self.
+	object* parent;
 };
 
 }
