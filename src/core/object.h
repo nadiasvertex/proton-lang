@@ -42,11 +42,6 @@ public:
 	static object *none;
 };
 
-#include "type.h"
-
-/// The one and only None object.
-object* object::none = new object(type::none);
-
 /// The garbage collecting allocator for objects, used
 /// with the STL allocator classes.
 typedef gc_allocator<object *> object_allocator;
@@ -56,6 +51,8 @@ typedef gc_allocator<std::pair<std::wstring, object*>> named_object_allocator;
 typedef std::map<std::wstring, object *, std::less<std::wstring>,named_object_allocator> object_map;
 
 typedef std::vector<object*, object_allocator> object_vector;
+
+
 }
 
 #endif /* OBJECT_H_ */

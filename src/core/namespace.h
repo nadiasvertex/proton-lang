@@ -3,6 +3,7 @@
 
 #include "core-internal.h"
 #include "object.h"
+#include "singletons.h"
 
 namespace proton {
 
@@ -10,7 +11,7 @@ class name_space : public object {
 
 	object_map names;
 public:
-	name_space():object(type::py_namespace)
+	name_space():object(type::py_namespace) {}
 
 	/// Get the value bound to the key.
 	object *get(std::wstring key, object* default_value = object::none) {
