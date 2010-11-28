@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <map>
+#include <vector>
 
 #include "core-internal.h"
 #include "exception.h"
