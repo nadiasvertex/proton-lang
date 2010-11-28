@@ -28,6 +28,13 @@ public:
 
 };
 
+class type_error: public exception {
+
+};
+
+class name_error: public exception {
+
+};
 
 }
 

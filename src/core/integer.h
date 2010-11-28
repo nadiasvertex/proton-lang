@@ -45,7 +45,10 @@ public:
 
 	}
 
-	integer* add(integer* r) {
+	//==-------------------------------------------------------------------==/
+	// Numeric Methods
+
+	virtual integer* add(integer* r) {
 		auto result = new integer();
 
 		mpz_add(result->value, this->value, r->value);

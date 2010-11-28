@@ -75,6 +75,28 @@ public:
 
 	}
 
+	/// Loads an object value bound to a name in the namespace for this
+	/// function.
+	jit_value_t load(std::wstring name) {
+
+		jit_value_t args[2] = { ld_constant_pointer(new std::wstring(name)), ns };
+
+		return jit_insn_call_native(f->jit, "proto_load",
+						(void*) proto_load, binary_fn_sig, args, 1, 0);
+	}
+
+	/// Add two objects.
+	jit_value_t add(jit_value_t l, jit_value_t r) {
+		jit_value_t args[2] = { l, r };
+
+		return jit_insn_call_native(f->jit, "proto_add",
+				(void*) proto_add, binary_fn_sig, args, 1, 0);
+	}
+
+	void ret(jit_value_t v) {
+		jit_insn_return(f->jit, v);
+	}
+
 };
 
 }

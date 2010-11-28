@@ -40,6 +40,28 @@ proton::name_space* proto_bind_namespace(proton::closure *c, proton::function *f
 	return f->bind_closure_to_namespace(c);
 }
 
+/// Loads an object from a namespace.
+proton::object* proto_load(std::wstring* name, proton::name_space* ns) {
+	auto o = ns->get(*name);
+
+	if (o==proton::object::none) {
+		jit_exception_throw(new proton::name_error());
+	}
+
+	return o;
+}
+
+//===---------------------------------------------------------------------====//
+// Binary protocol operations
+
+proton::object* proto_add(proton::object *l, proton::object *r) {
+	try {
+		return l->add(r);
+	} catch(proton::exception* e) {
+		jit_exception_throw(e);
+	}
+}
+
 
 //===---------------------------------------------------------------------====//
 // Query protocol operations
@@ -58,6 +80,6 @@ bool proto_is_number_type(proton::object *o) {
 	return o->is_number();
 }
 
-}
+} // end extern
 
 #endif /* PROTOCOL_H_ */

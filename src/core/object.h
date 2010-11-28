@@ -6,6 +6,7 @@
 #include <map>
 
 #include "core-internal.h"
+#include "exception.h"
 
 namespace proton {
 
@@ -37,6 +38,13 @@ public:
 	/// Returns true if the object is a number.
 	virtual bool is_number() {
 		return false;
+	}
+
+	//==-------------------------------------------------------------------==/
+	// Numeric Methods
+
+	virtual object* add(object* other) {
+		throw new type_error();
 	}
 
 	static object *none;
