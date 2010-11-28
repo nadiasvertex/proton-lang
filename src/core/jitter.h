@@ -51,10 +51,10 @@ public:
 	void prologue() {
 		closure = jit_value_get_param(f->jit, 0);
 
-		jit_value_t args[2] = { closure, ld_constant_pointer(this) };
+		jit_value_t args[2] = { closure, ld_constant_pointer(f) };
 
 		ns = jit_insn_call_native(f->jit, "proto_bind_namespace",
-				(void*) proto_bind_namespace, binary_fn_sig, args, 1, 0);
+				(void*) proto_bind_namespace, binary_fn_sig, args, 2, 0);
 	}
 
 	/// Generates a constant value that holds a pointer.   This can be used as
@@ -82,7 +82,7 @@ public:
 		jit_value_t args[2] = { ld_constant_pointer(new std::wstring(name)), ns };
 
 		return jit_insn_call_native(f->jit, "proto_load",
-						(void*) proto_load, binary_fn_sig, args, 1, 0);
+						(void*) proto_load, binary_fn_sig, args, 2, 0);
 	}
 
 	/// Add two objects.
@@ -90,7 +90,7 @@ public:
 		jit_value_t args[2] = { l, r };
 
 		return jit_insn_call_native(f->jit, "proto_add",
-				(void*) proto_add, binary_fn_sig, args, 1, 0);
+				(void*) proto_add, binary_fn_sig, args, 2, 0);
 	}
 
 	void ret(jit_value_t v) {

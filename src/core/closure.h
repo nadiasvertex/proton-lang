@@ -22,6 +22,12 @@ public:
 	/// If this is a call to a member function, we need to bind self.
 	/// The parent field contains the value that would be bound to self.
 	object* parent;
+
+	closure() {}
+
+	closure(object_vector _positional_paramters) {
+		positional.insert(positional.begin(),  _positional_paramters.begin(), _positional_paramters.end());
+	}
 };
 
 }

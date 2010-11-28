@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 
+#include <stdio.h>
+#include <jit/jit-dump.h>
+
 namespace proton {
 
 /// The parameter signature for a Python function
@@ -61,11 +64,28 @@ public:
 
 		context::lock lck();
 
-		jit_function_create(ctx->jit_ctx(), python_fn_sig);
+		jit = jit_function_create(ctx->jit_ctx(), python_fn_sig);
 	}
 
 	jit_function_t jit_fn() {
 		return jit;
+	}
+
+	/// Adds an argument name to the function.
+	void add_arg_name(std::wstring name) {
+		arguments.push_back(name);
+	}
+
+	void add_arg_names(std::initializer_list<std::wstring> names) {
+		arguments.insert(arguments.begin(), names.begin(), names.end());
+	}
+
+	void set_vararg_name(std::wstring _vararg_name) {
+		vararg_name = _vararg_name;
+	}
+
+	void set_kwarg_name(std::wstring _kwarg_name) {
+		kwarg_name = _kwarg_name;
 	}
 
 	/// Compiles the function - must be run before executing it.
@@ -121,6 +141,11 @@ public:
 
 		return ns;
 	}
+
+	void dump() {
+		jit_dump_function(stdout, jit, "python_func");
+	}
+
 
 };
 

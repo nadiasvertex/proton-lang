@@ -15,13 +15,13 @@ LIBS =  $(GC_LIBS) $(JIT_LIBS) $(GMP_LIBS) -lpthread -ldl
 INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/gmp-5.0.1
 
 %.o : %.cpp
-	g++ -std=c++0x $(INCLUDES) -c -o$@ $< 
+	g++ -g -std=c++0x $(INCLUDES) -c -o$@ $< 
 
 all: proton
 
 test: INCLUDES = $(INC_FLAGS) -Ideps/igloo
 test: $(TEST_OBJS)  
-	g++ -oproton_test  $< $(LIBS)
+	g++ -g -oproton_test  $< $(LIBS)
 	./proton_test
 
 clean:
