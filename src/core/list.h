@@ -3,6 +3,7 @@
 
 #include "core-internal.h"
 #include "object.h"
+#include "type.h"
 #include "exception.h"
 
 #include <vector>
@@ -12,6 +13,8 @@ namespace proton {
 class list : public object {
 	object_vector items;
 public:
+	list():object(type::list) {}
+
 	void append(object* x) {
 		items.push_back(x);
 	}

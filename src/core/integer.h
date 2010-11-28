@@ -15,29 +15,42 @@ public:
 	/// Should be used when a zero integer is desired.
 	static integer *zero;
 
-	integer() {
+	integer() :
+		number(type::py_int) {
 		mpz_init(value);
 	}
 
-	integer(proton::int32 v) {
+	integer(proton::int32 v) :
+		number(type::py_int) {
 		mpz_init_set_si(value, v);
 	}
 
-	integer(proton::int64 v) {
+	integer(proton::int64 v) :
+		number(type::py_int) {
 		mpz_init_set_si(value, v);
 	}
 
-	integer(proton::uint32 v) {
+	integer(proton::uint32 v) :
+		number(type::py_int) {
 		mpz_init_set_ui(value, v);
 	}
 
-	integer(proton::uint64 v) {
+	integer(proton::uint64 v) :
+		number(type::py_int) {
 		mpz_init_set_ui(value, v);
 	}
 
 	~integer() {
 		mpz_clear(value);
 
+	}
+
+	integer* add(integer* r) {
+		auto result = new integer();
+
+		mpz_add(result->value, this->value, r->value);
+
+		return result;
 	}
 
 };

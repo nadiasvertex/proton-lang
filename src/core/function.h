@@ -3,6 +3,7 @@
 
 #include "core-internal.h"
 #include "namespace.h"
+#include "type.h"
 #include "list.h"
 #include "exception.h"
 
@@ -33,7 +34,7 @@ jit_type_t binary_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_voi
 		binary_fn_sig_parms, 2, 1);
 
 
-class function: public gc {
+class function: public object {
 	friend class jitter;
 
 	/// The proton context for this function
@@ -55,7 +56,7 @@ class function: public gc {
 	std::wstring kwarg_name;
 
 public:
-	function(context *_ctx) :
+	function(context *_ctx) : object(type::function),
 		ctx(_ctx) {
 
 		context::lock lck();
