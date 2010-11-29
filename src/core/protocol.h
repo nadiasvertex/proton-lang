@@ -37,7 +37,12 @@ proton::object* proto_new_int(proton::object *o, proton::int32 v) {
 }
 
 proton::name_space* proto_bind_namespace(proton::closure *c, proton::function *f) {
-	return f->bind_closure_to_namespace(c);
+	try {
+		return f->bind_closure_to_namespace(c);
+	} catch (proton::exception *e) {
+		jit_exception_throw(e);
+	}
+
 }
 
 /// Loads an object from a namespace.

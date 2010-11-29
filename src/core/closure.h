@@ -25,8 +25,9 @@ public:
 
 	closure() {}
 
-	closure(object_vector _positional_paramters) {
-		positional.insert(positional.begin(),  _positional_paramters.begin(), _positional_paramters.end());
+	closure(object_vector _positional_parameters) {
+		positional.clear();
+		positional.insert(positional.begin(),  _positional_parameters.begin(), _positional_parameters.end());
 	}
 };
 

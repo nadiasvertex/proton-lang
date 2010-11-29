@@ -98,7 +98,7 @@ public:
 	/// Allows you to "manually" execute the function.
 	closure* apply(closure* c) {
 
-		void * args[1] = {c};
+		void * args[1] = {&c};
 		closure *result;
 
 		jit_function_apply(jit, args, &result);

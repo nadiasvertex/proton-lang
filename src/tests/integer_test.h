@@ -37,6 +37,8 @@ Context(AFreshInteger)
 
 		j->ret(result);
 
+		f->dump();
+
 		f->compile();
 
 		j->end();
@@ -49,6 +51,13 @@ Context(AFreshInteger)
 		// Call the function and see what happens!
 		auto call_result = f->apply(c);
 
+		Assert::That(call_result, Is().Not().EqualTo((void*)0));
+
+		Assert::That(ctx->has_exception(), Equals(false));
+
+		auto result_as_object = (proton::object*)call_result;
+
+		Assert::That(result_as_object->is_type(proton::type::py_int), Equals(true));
 	}
 
 };
