@@ -32,7 +32,7 @@ public:
 	}
 
 	bool has_exception() {
-		return jit_exception_get_last() == 0;
+		return jit_exception_get_last() != 0;
 	}
 
 	// Handles automatic locking and unlocking of the context,
