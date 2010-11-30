@@ -70,9 +70,39 @@ public:
 		}
 
 		throw new type_error();
-
 	}
 
+	virtual integer* sub(integer* r) {
+		auto result = new integer();
+
+		mpz_sub(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* sub(object* r) {
+		if (r->is_type(type::py_int)) {
+			return sub(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	virtual integer* mul(integer* r) {
+		auto result = new integer();
+
+		mpz_mul(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* mul(object* r) {
+		if (r->is_type(type::py_int)) {
+			return mul(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
 
 
 

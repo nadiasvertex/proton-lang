@@ -94,7 +94,8 @@ public:
 					   (void*) proto_store, store_fn_sig, args, 3, 0);
 	}
 
-	/// Only performs a store if the inplace operation
+	/// Only performs a store if the inplace operation returned an object that is
+	/// different than the old object.
 	void inplace_store(std::wstring name, jit_value_t original, jit_value_t possibly_new) {
 		// Compare the pointers and make sure that the same object
 		// was returned.  If not, we will need to rebind the object to

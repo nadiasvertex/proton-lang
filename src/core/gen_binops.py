@@ -3,6 +3,83 @@ import sys
 binops = ["add", "sub", "mul", "truediv", "floordiv", "mod", "divmod", "pow", "lshift", "rshift", "bitwise_and", "bitwise_or", "bitwise_xor" ]
 inplace_ops = ["add", "sub", "mul", "truediv", "floordiv", "mod", "pow", "lshift", "rshift", "bitwise_and", "bitwise_or", "bitwise_xor", ]
 
+test_code="""
+Context(IntegerJit{cap_op})
+{{
+    proton::context *ctx;
+    proton::function *f;
+
+    void SetUp()
+    {{
+        ctx = new proton::context();
+        f = new proton::function(ctx);
+
+        auto j = new proton::jitter(f);
+
+        f->add_arg_names({{L"x", L"y"}});
+
+        j->start();
+        j->prologue();
+
+        auto lv = j->load(L"x");
+        auto rv = j->load(L"y");
+
+        auto result = j->{op}(lv, rv);
+
+        j->ret(result);
+
+        f->compile();
+
+        j->end();
+    }}
+
+    Spec({cap_op}TwoIntsDoesntThrow) {{
+        auto l = new proton::integer({lvalue});
+        auto r = new proton::integer({rvalue});
+
+        // Create closure to call the function.
+        auto c = new proton::closure({{l, r}});
+
+        //f->dump();
+
+        // Call the function and see what happens!
+        auto call_result = f->apply(c);
+
+        Assert::That(!ctx->has_exception());
+    }}
+
+    Spec({cap_op}TwoIntsYieldsInt) {{
+        auto l = new proton::integer({lvalue});
+        auto r = new proton::integer({rvalue});
+
+        // Create closure to call the function.
+        auto c = new proton::closure({{l, r}});
+
+        // Call the function and see what happens!
+        auto call_result = f->apply(c);
+
+        auto result_as_object = (proton::object*)call_result;
+
+        Assert::That(result_as_object->is_type(proton::type::py_int));
+    }}
+
+    Spec({cap_op}TwoIntsYieldsCorrectValue) {{
+        auto l = new proton::integer({lvalue});
+        auto r = new proton::integer({rvalue});
+
+        // Create closure to call the function.
+        auto c = new proton::closure({{l, r}});
+
+        // Call the function and see what happens!
+        auto call_result = f->apply(c);
+
+        auto result_as_integer = (proton::integer*)call_result;
+
+        Assert::That(result_as_integer->get_int64(), Is().EqualTo({op_result}));
+    }}
+}};
+"""
+
 with open(sys.argv[1], "w") as out:    
     for op in binops:
         if op!="pow":
@@ -97,3 +174,12 @@ with open(sys.argv[2], "w") as out:
     
         out.write(func.format(op=op))
  
+with open(sys.argv[3], "w") as out:
+    for op in binops:
+        lvalue=100
+        rvalue=23
+        perf_op = op if "bitwise" not in op else op.replace("bitwise_", "")
+        
+        func = test_code.format(op=op, cap_op=op.capitalize(), lvalue=lvalue, rvalue=rvalue, op_result=eval("lvalue.__%s__(rvalue)" % perf_op))
+        out.write(func)
+        
