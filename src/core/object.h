@@ -11,6 +11,9 @@
 
 namespace proton {
 
+/// Garbage collected unicode string type.
+typedef std::wstring<wchar_t, char_traits<wchar_t>, gc_allocator<wchar_t>> wstring;
+
 class type;
 
 /// The object class is the root object for the Python hierarchy. All
@@ -39,6 +42,13 @@ public:
 	/// Returns true if the object is a number.
 	virtual bool is_number() {
 		return false;
+	}
+
+	//==-------------------------------------------------------------------==/
+	// Basic Methods
+
+	virtual object* repr() {
+
 	}
 
 	//==-------------------------------------------------------------------==/
@@ -237,12 +247,15 @@ public:
 /// with the STL allocator classes.
 typedef gc_allocator<object *> object_allocator;
 
-typedef gc_allocator<std::pair<std::wstring, object*>> named_object_allocator;
+/// Garbage collecting allocator for object maps, designed for the
+/// STL map container.
+typedef gc_allocator<std::pair<wstring, object*>> named_object_allocator;
 
-typedef std::map<std::wstring, object *, std::less<std::wstring>,named_object_allocator> object_map;
+/// Garbage collected map container.
+typedef std::map<std::wstring, object *, std::less<wstring>,named_object_allocator> object_map;
 
+/// Garbage collected vector container.
 typedef std::vector<object*, object_allocator> object_vector;
-
 
 }
 
