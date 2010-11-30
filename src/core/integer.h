@@ -56,7 +56,7 @@ public:
 	//==-------------------------------------------------------------------==/
 	// Numeric Methods
 
-	virtual integer* add(integer* r) {
+	integer* add(integer* r) {
 		auto result = new integer();
 
 		mpz_add(result->value, this->value, r->value);
@@ -72,7 +72,7 @@ public:
 		throw new type_error();
 	}
 
-	virtual integer* sub(integer* r) {
+	integer* sub(integer* r) {
 		auto result = new integer();
 
 		mpz_sub(result->value, this->value, r->value);
@@ -88,7 +88,7 @@ public:
 		throw new type_error();
 	}
 
-	virtual integer* mul(integer* r) {
+	integer* mul(integer* r) {
 		auto result = new integer();
 
 		mpz_mul(result->value, this->value, r->value);
@@ -103,6 +103,55 @@ public:
 
 		throw new type_error();
 	}
+
+	integer* truediv(integer* r) {
+		auto result = new integer();
+
+		mpz_fdiv_q(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* truediv(object* r) {
+		if (r->is_type(type::py_int)) {
+			return truediv(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* floordiv(integer* r) {
+		auto result = new integer();
+
+		mpz_fdiv_q(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* floordiv(object* r) {
+		if (r->is_type(type::py_int)) {
+			return floordiv(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* mod(integer* r) {
+		auto result = new integer();
+
+		mpz_fdiv_q(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* mod(object* r) {
+		if (r->is_type(type::py_int)) {
+			return mod(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
 
 
 
