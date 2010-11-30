@@ -56,10 +56,15 @@ proton::object* proto_load(std::wstring* name, proton::name_space* ns) {
 	return o;
 }
 
+/// Stores an object into a namespace.
+void proto_store(std::wstring* name, proton::object* o, proton::name_space* ns) {
+	ns->set(*name, o);
+}
+
 //===---------------------------------------------------------------------====//
 // Binary protocol operations
 
-#include "binops.h"
+#include "proto-binops.h"
 
 //===---------------------------------------------------------------------====//
 // Query protocol operations

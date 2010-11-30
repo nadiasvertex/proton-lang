@@ -32,9 +32,16 @@ jit_type_t query_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_sys_
 /// The parameter signature for a binary message
 jit_type_t binary_fn_sig_parms[2] = { jit_type_void_ptr, jit_type_void_ptr };
 
-/// The function signature for a Python function
+/// The function signature for a binary operation
 jit_type_t binary_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr,
 		binary_fn_sig_parms, 2, 1);
+
+/// The parameter signature for a store message
+jit_type_t store_fn_sig_parms[3] = { jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr };
+
+/// The function signature for a store message
+jit_type_t store_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void,
+		store_fn_sig_parms, 3, 1);
 
 
 class function: public object {

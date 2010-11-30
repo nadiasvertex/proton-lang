@@ -85,22 +85,37 @@ public:
 						(void*) proto_load, binary_fn_sig, args, 2, 0);
 	}
 
-	/// Add two objects.
-	jit_value_t add(jit_value_t l, jit_value_t r) {
-		jit_value_t args[2] = { l, r };
+	/// Stores an object by binding it to a name in a namespace.
+	void store(std::wstring name, jit_value_t o) {
 
-		return jit_insn_call_native(f->jit, "proto_add",
-				(void*) proto_add, binary_fn_sig, args, 2, 0);
+		jit_value_t args[3] = {ld_constant_pointer(new std::wstring(name)), o, ns};
+
+		jit_insn_call_native(f->jit, "proto_store",
+					   (void*) proto_store, store_fn_sig, args, 3, 0);
 	}
 
-	/// Subtract two objects.
-	jit_value_t sub(jit_value_t l, jit_value_t r) {
-		jit_value_t args[2] = { l, r };
+	/// Only performs a store if the inplace operation
+	void inplace_store(std::wstring name, jit_value_t original, jit_value_t possibly_new) {
+		// Compare the pointers and make sure that the same object
+		// was returned.  If not, we will need to rebind the object to
+		// the name.
+		auto label = new jit_label_t;
+		*label = jit_label_undefined;
 
-		return jit_insn_call_native(f->jit, "proto_sub",
-				(void*) proto_sub, binary_fn_sig, args, 2, 0);
+		auto tmp1 = jit_insn_eq(f->jit, original, possibly_new);
+		jit_insn_branch_if_not(f->jit, tmp1, label);
+
+		// Store the new value to the original name.
+		store(name, possibly_new);
+
+		// Jump to here if no rebind is needed.
+		jit_insn_label(f->jit, label);
 	}
 
+	//===-----------------------------------------------------------------------===//
+	// Numeric operations
+
+#include "jitter-binops.h"
 
 	void ret(jit_value_t v) {
 		jit_insn_return(f->jit, v);

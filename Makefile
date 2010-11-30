@@ -20,7 +20,7 @@ INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/
 all: proton
 
 binops:
-	python src/core/gen_binops.py > src/core/binops.h
+	python src/core/gen_binops.py src/core/proto-binops.h src/core/jitter-binops.h
 
 test_objects: $(TEST_OBJS)  
 	g++ -g -oproton_test  $< $(LIBS)
