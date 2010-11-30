@@ -14,7 +14,7 @@ public:
 	name_space():object(type::py_namespace) {}
 
 	/// Get the value bound to the key.
-	object *get(std::wstring key, object* default_value = object::none) {
+	object *get(wstring key, object* default_value = object::none) {
 		auto it = names.find(key);
 
 		if (it == names.end()) {
@@ -24,7 +24,7 @@ public:
 		return it->second;
 	}
 
-	void set(std::wstring key, object* value) {
+	void set(wstring key, object* value) {
 		names[key] = value;
 	}
 

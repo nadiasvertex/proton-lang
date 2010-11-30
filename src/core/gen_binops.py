@@ -16,13 +16,13 @@ Context(IntegerJit{cap_op})
 
         auto j = new proton::jitter(f);
 
-        f->add_arg_names({{L"x", L"y"}});
+        f->add_arg_names({{UNICODE_STRING_SIMPLE("x"), UNICODE_STRING_SIMPLE("y")}});
 
         j->start();
         j->prologue();
 
-        auto lv = j->load(L"x");
-        auto rv = j->load(L"y");
+        auto lv = j->load(UNICODE_STRING("x",1));
+        auto rv = j->load(UNICODE_STRING("y",1));
 
         auto result = j->{op}(lv, rv);
 
@@ -156,7 +156,7 @@ with open(sys.argv[2], "w") as out:
     for op in inplace_ops:
         func = """
     /// in-place {op} two objects.
-    jit_value_t i{op}(std::wstring lname, jit_value_t r) {{
+    jit_value_t i{op}(wstring lname, jit_value_t r) {{
         // Get the object bound to the name.
         auto l = load(lname);
     

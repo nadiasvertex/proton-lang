@@ -54,16 +54,16 @@ class function: public object {
 	jit_function_t jit;
 
 	/// The names of the positional parameters for this function.
-	std::vector<std::wstring, gc_allocator<std::wstring>> arguments;
+	std::vector<wstring, gc_allocator<std::wstring>> arguments;
 
 	/// A method is a member of a class
 	bool is_method;
 
 	/// Non-empty if this function accepts varargs.
-	std::wstring vararg_name;
+	wstring vararg_name;
 
 	/// Non-empty if this function accepts keyword arguments.
-	std::wstring kwarg_name;
+	wstring kwarg_name;
 
 public:
 	function(context *_ctx) : object(type::function),
@@ -79,19 +79,19 @@ public:
 	}
 
 	/// Adds an argument name to the function.
-	void add_arg_name(std::wstring name) {
+	void add_arg_name(wstring name) {
 		arguments.push_back(name);
 	}
 
-	void add_arg_names(std::initializer_list<std::wstring> names) {
+	void add_arg_names(std::initializer_list<wstring> names) {
 		arguments.insert(arguments.begin(), names.begin(), names.end());
 	}
 
-	void set_vararg_name(std::wstring _vararg_name) {
+	void set_vararg_name(wstring _vararg_name) {
 		vararg_name = _vararg_name;
 	}
 
-	void set_kwarg_name(std::wstring _kwarg_name) {
+	void set_kwarg_name(wstring _kwarg_name) {
 		kwarg_name = _kwarg_name;
 	}
 
@@ -119,7 +119,7 @@ public:
 	name_space* bind_closure_to_namespace(closure *c) {
 		auto ns = new name_space();
 
-		if (vararg_name.size()==0 && c->positional.size() > arguments.size()){
+		if (vararg_name.isEmpty() && c->positional.size() > arguments.size()){
 			throw new argument_error(this, arguments.size(), c->positional.size());
 		}
 
@@ -139,7 +139,7 @@ public:
 			}
 		}
 
-		if (kwarg_name.size()) {
+		if (!kwarg_name.isEmpty()) {
 			auto kwargs = new name_space();
 			kwargs->insert(c->keyword.begin(), c->keyword.end());
 

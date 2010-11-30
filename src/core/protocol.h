@@ -46,7 +46,7 @@ proton::name_space* proto_bind_namespace(proton::closure *c, proton::function *f
 }
 
 /// Loads an object from a namespace.
-proton::object* proto_load(std::wstring* name, proton::name_space* ns) {
+proton::object* proto_load(proton::wstring* name, proton::name_space* ns) {
 	auto o = ns->get(*name);
 
 	if (o==proton::object::none) {
@@ -57,7 +57,7 @@ proton::object* proto_load(std::wstring* name, proton::name_space* ns) {
 }
 
 /// Stores an object into a namespace.
-void proto_store(std::wstring* name, proton::object* o, proton::name_space* ns) {
+void proto_store(proton::wstring* name, proton::object* o, proton::name_space* ns) {
 	ns->set(*name, o);
 }
 

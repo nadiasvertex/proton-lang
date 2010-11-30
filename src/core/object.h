@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <string>
+#include <sstream>
 #include <map>
 #include <vector>
 
@@ -11,8 +12,8 @@
 
 namespace proton {
 
-/// Garbage collected unicode string type.
-typedef std::wstring<wchar_t, char_traits<wchar_t>, gc_allocator<wchar_t>> wstring;
+/// Unicode string type
+typedef UnicodeString wstring;
 
 class type;
 
@@ -48,6 +49,10 @@ public:
 	// Basic Methods
 
 	virtual object* repr() {
+		wstring desc;
+
+		desc.append(UNICODE_STRING_SIMPLE("<object at "));
+		desc.append(UNICODE_STRING_SIMPLE(">"));
 
 	}
 
@@ -252,7 +257,7 @@ typedef gc_allocator<object *> object_allocator;
 typedef gc_allocator<std::pair<wstring, object*>> named_object_allocator;
 
 /// Garbage collected map container.
-typedef std::map<std::wstring, object *, std::less<wstring>,named_object_allocator> object_map;
+typedef std::map<wstring, object *, std::less<wstring>,named_object_allocator> object_map;
 
 /// Garbage collected vector container.
 typedef std::vector<object*, object_allocator> object_vector;

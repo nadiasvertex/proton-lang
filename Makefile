@@ -10,9 +10,10 @@ TEST_OBJS  = src/tests/main.o
 GC_LIBS  = -Ldeps/gc-7.1/.libs -lgc -lgccpp
 JIT_LIBS = -Ldeps/libjit-0.1.2/jit/.libs -ljit 
 GMP_LIBS = -Ldeps/gmp-5.0.1/.libs -lgmp
+ICU_LIBS = -Ldeps/icu/source/lib -licuuc
 
-LIBS =  $(GC_LIBS) $(JIT_LIBS) $(GMP_LIBS) -lpthread -ldl
-INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/gmp-5.0.1
+LIBS =  $(GC_LIBS) $(JIT_LIBS) $(GMP_LIBS) $(ICU_LIBS) -lpthread -ldl
+INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/gmp-5.0.1 -Ideps/icu/source/common
 
 %.o : %.cpp
 	g++ -g -std=c++0x $(INCLUDES) -c -o$@ $< 

@@ -12,3 +12,7 @@ cd ..
 cd gmp-5.0.1
 sh configure --enable-cxx --disable-shared --enable-static --with-pic && make clean && make all
 cd ..
+
+cd icu/source
+sh configure --disable-shared --enable-static --with-pic && make clean && make all
+cd ../..

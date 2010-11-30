@@ -13,7 +13,7 @@ namespace proton {
 struct debuginfo {
 	int line;
 	int col;
-	std::wstring filename;
+	wstring filename;
 };
 
 class jitter: public gc {
@@ -77,18 +77,18 @@ public:
 
 	/// Loads an object value bound to a name in the namespace for this
 	/// function.
-	jit_value_t load(std::wstring name) {
+	jit_value_t load(wstring name) {
 
-		jit_value_t args[2] = { ld_constant_pointer(new std::wstring(name)), ns };
+		jit_value_t args[2] = { ld_constant_pointer(new wstring(name)), ns };
 
 		return jit_insn_call_native(f->jit, "proto_load",
 						(void*) proto_load, binary_fn_sig, args, 2, 0);
 	}
 
 	/// Stores an object by binding it to a name in a namespace.
-	void store(std::wstring name, jit_value_t o) {
+	void store(wstring name, jit_value_t o) {
 
-		jit_value_t args[3] = {ld_constant_pointer(new std::wstring(name)), o, ns};
+		jit_value_t args[3] = {ld_constant_pointer(new wstring(name)), o, ns};
 
 		jit_insn_call_native(f->jit, "proto_store",
 					   (void*) proto_store, store_fn_sig, args, 3, 0);
@@ -96,7 +96,7 @@ public:
 
 	/// Only performs a store if the inplace operation returned an object that is
 	/// different than the old object.
-	void inplace_store(std::wstring name, jit_value_t original, jit_value_t possibly_new) {
+	void inplace_store(wstring name, jit_value_t original, jit_value_t possibly_new) {
 		// Compare the pointers and make sure that the same object
 		// was returned.  If not, we will need to rebind the object to
 		// the name.

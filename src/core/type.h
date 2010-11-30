@@ -9,9 +9,9 @@
 namespace proton {
 
 class type: public object {
-	std::wstring name;
+	wstring name;
 public:
-	type(std::wstring _name) :
+	type(wstring _name) :
 		object(type::py_type), name(_name) {
 	}
 
