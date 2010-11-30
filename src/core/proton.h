@@ -12,7 +12,6 @@
 #include "integer.h"
 #include "string.h"
 #include "exception.h"
-#include "singletons.h"
 
 #include "protocol.h"
 #include "jitter.h"

@@ -1,13 +1,7 @@
-SHELL_SRC  = src/shell
+
 SHELL_OBJS = src/shell/main.o
-
-TEST_SRC   = src/tests
 TEST_OBJS  = src/tests/main.o
-
-CORE_OBJS  = src/core/object.o
-
-#CORE_SRC   = src/core
-#CORE_OBJS  = 
+CORE_OBJS  = src/core/object.o src/core/singletons.o
 
 GC_LIBS  = -Ldeps/gc-7.1/.libs -lgc -lgccpp
 JIT_LIBS = -Ldeps/libjit-0.1.2/jit/.libs -ljit 

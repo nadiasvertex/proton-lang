@@ -3,7 +3,6 @@
 
 #include "core-internal.h"
 #include "object.h"
-#include "singletons.h"
 
 namespace proton {
 
