@@ -15,6 +15,13 @@ namespace proton {
 /// Unicode string type
 typedef UnicodeString wstring;
 
+/// Garbage collected, 8-bit string for creating string literals in some internal APIs
+typedef std::basic_string<char, std::char_traits<char>, gc_allocator<char>> internal_string;
+
+/// Garbage collected, 8-bit string stream for createing string literals in some internal APIs
+typedef std::basic_stringstream<char, std::char_traits<char>, gc_allocator<char>> internal_stringstream;
+
+
 class type;
 
 /// The object class is the root object for the Python hierarchy. All
@@ -48,13 +55,7 @@ public:
 	//==-------------------------------------------------------------------==/
 	// Basic Methods
 
-	virtual object* repr() {
-		wstring desc;
-
-		desc.append(UNICODE_STRING_SIMPLE("<object at "));
-		desc.append(UNICODE_STRING_SIMPLE(">"));
-
-	}
+	virtual object* repr();
 
 	//==-------------------------------------------------------------------==/
 	// Numeric Methods

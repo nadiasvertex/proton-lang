@@ -4,6 +4,8 @@ SHELL_OBJS = src/shell/main.o
 TEST_SRC   = src/tests
 TEST_OBJS  = src/tests/main.o
 
+CORE_OBJS  = src/core/object.o
+
 #CORE_SRC   = src/core
 #CORE_OBJS  = 
 
@@ -13,7 +15,7 @@ GMP_LIBS = -Ldeps/gmp-5.0.1/.libs -lgmp
 ICU_LIBS = -Ldeps/icu/source/lib -licuuc
 
 LIBS =  $(GC_LIBS) $(JIT_LIBS) $(GMP_LIBS) $(ICU_LIBS) -lpthread -ldl
-INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/gmp-5.0.1 -Ideps/icu/source/common
+INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/gmp-5.0.1 -Ideps/icu/source/common -Ideps/icu/source/i18n
 
 %.o : %.cpp
 	g++ -g -std=c++0x $(INCLUDES) -c -o$@ $< 
@@ -23,10 +25,10 @@ all: proton
 binops:
 	python src/core/gen_binops.py src/core/proto-binops.h src/core/jitter-binops.h src/tests/jit_int_test.h
 
-test_objects: $(TEST_OBJS)  
-	g++ -g -oproton_test  $< $(LIBS)
+test_objects: $(TEST_OBJS) $(CORE_OBJS)  
+	g++ -g -oproton_test $(TEST_OBJS) $(CORE_OBJS) $(LIBS)
 	
-shell_objects:  $(SHELL_OBJS)
+shell_objects:  $(SHELL_OBJS) $(CORE_OBJS)
 	g++ -oproton  $< $(LIBS)
 
 test: INCLUDES = $(INC_FLAGS) -Ideps/igloo

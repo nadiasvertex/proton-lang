@@ -3,6 +3,7 @@
 
 #include "core-internal.h"
 #include "object.h"
+#include "type.h"
 
 namespace proton {
 
@@ -12,9 +13,11 @@ public:
 	string() :
 		object(type::py_str) {
 	}
-	string(wstring &s) :
+	string(const wstring &s) :
 		object(type::py_str), value(s) {
 	}
+
+
 
 
 };

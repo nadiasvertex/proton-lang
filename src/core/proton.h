@@ -10,6 +10,7 @@
 #include "function.h"
 #include "sequence.h"
 #include "integer.h"
+#include "string.h"
 #include "exception.h"
 #include "singletons.h"
 

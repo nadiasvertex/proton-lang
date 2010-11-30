@@ -6,6 +6,7 @@
 #include <gc_cpp.h>
 #include <gc_allocator.h>
 #include <unicode/unistr.h>
+#include <unicode/decimfmt.h>
 
 namespace proton {
 typedef unsigned char uint8;
