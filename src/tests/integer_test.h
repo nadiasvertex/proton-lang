@@ -78,6 +78,23 @@ Context(IntegerJitOperations)
 		Assert::That(result_as_object->is_type(proton::type::py_int));
 	}
 
+	Spec(AddingTwoIntsYieldsCorrectValue) {
+		auto l = new proton::integer(5);
+		auto r = new proton::integer(7);
+
+		// Create closure to call the function.
+		auto c = new proton::closure({l, r});
+
+		// Call the function and see what happens!
+		auto call_result = f->apply(c);
+
+		auto result_as_integer = (proton::integer*)call_result;
+
+		Assert::That(result_as_integer->get_int64(), Is().EqualTo(12));
+
+	}
+
+
 
 };
 

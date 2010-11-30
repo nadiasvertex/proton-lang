@@ -45,6 +45,14 @@ public:
 
 	}
 
+	int64 get_int64() {
+		return mpz_get_si(value);
+	}
+
+	uint64 get_uint64() {
+		return mpz_get_ui(value);
+	}
+
 	//==-------------------------------------------------------------------==/
 	// Numeric Methods
 
