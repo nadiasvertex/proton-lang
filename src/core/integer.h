@@ -139,7 +139,7 @@ public:
 	integer* mod(integer* r) {
 		auto result = new integer();
 
-		mpz_fdiv_q(result->value, this->value, r->value);
+		mpz_mod(result->value, this->value, r->value);
 
 		return result;
 	}
@@ -152,9 +152,85 @@ public:
 		throw new type_error();
 	}
 
+	integer* rshift(integer* r) {
+		auto result = new integer();
 
+		mpz_tdiv_q_2exp(result->value, this->value, r->get_uint64());
 
+		return result;
+	}
 
+	virtual object* rshift(object* r) {
+		if (r->is_type(type::py_int)) {
+			return rshift(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* lshift(integer* r) {
+		auto result = new integer();
+
+		mpz_mul_2exp(result->value, this->value, r->get_uint64());
+
+		return result;
+	}
+
+	virtual object* lshift(object* r) {
+		if (r->is_type(type::py_int)) {
+			return lshift(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* bitwise_and(integer* r) {
+		auto result = new integer();
+
+		mpz_and(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* bitwise_and(object* r) {
+		if (r->is_type(type::py_int)) {
+			return bitwise_and(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* bitwise_or(integer* r) {
+		auto result = new integer();
+
+		mpz_ior(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* bitwise_or(object* r) {
+		if (r->is_type(type::py_int)) {
+			return bitwise_or(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
+
+	integer* bitwise_xor(integer* r) {
+		auto result = new integer();
+
+		mpz_xor(result->value, this->value, r->value);
+
+		return result;
+	}
+
+	virtual object* bitwise_xor(object* r) {
+		if (r->is_type(type::py_int)) {
+			return bitwise_xor(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+	}
 };
 
 /// Assign this to its one and only value.
