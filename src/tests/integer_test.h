@@ -14,15 +14,21 @@ Context(AFreshInteger)
 	{
 		auto i = new proton::integer();
 
-		Assert::That(i->is_type(proton::type::py_int), Is().EqualTo(true));
+		Assert::That(i->is_type(proton::type::py_int));
 	}
 
-	Spec(TwoIntsAreAddable) {
-		auto l = new proton::integer(5);
-		auto r = new proton::integer(7);
+};
 
-		auto ctx = new proton::context();
-		auto f = new proton::function(ctx);
+Context(IntegerJitOperations)
+{
+	proton::context *ctx;
+	proton::function *f;
+
+	void SetUp()
+	{
+		ctx = new proton::context();
+		f = new proton::function(ctx);
+
 		auto j = new proton::jitter(f);
 
 		f->add_arg_names({L"x", L"y"});
@@ -37,28 +43,41 @@ Context(AFreshInteger)
 
 		j->ret(result);
 
-		f->dump();
-
 		f->compile();
 
 		j->end();
+	}
+
+	Spec(AddingTwoIntsDoesntThrow) {
+		auto l = new proton::integer(5);
+		auto r = new proton::integer(7);
 
 		// Create closure to call the function.
 		auto c = new proton::closure({l, r});
 
-		f->dump();
+		//f->dump();
 
 		// Call the function and see what happens!
 		auto call_result = f->apply(c);
 
-		Assert::That(call_result, Is().Not().EqualTo((void*)0));
+		Assert::That(!ctx->has_exception());
+	}
 
-		Assert::That(ctx->has_exception(), Equals(false));
+	Spec(AddingTwoIntsYieldsInt) {
+		auto l = new proton::integer(5);
+		auto r = new proton::integer(7);
+
+		// Create closure to call the function.
+		auto c = new proton::closure({l, r});
+
+		// Call the function and see what happens!
+		auto call_result = f->apply(c);
 
 		auto result_as_object = (proton::object*)call_result;
 
-		Assert::That(result_as_object->is_type(proton::type::py_int), Equals(true));
+		Assert::That(result_as_object->is_type(proton::type::py_int));
 	}
+
 
 };
 

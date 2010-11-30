@@ -56,6 +56,18 @@ public:
 		return result;
 	}
 
+	virtual object* add(object* r) {
+		if (r->is_type(type::py_int)) {
+			return add(static_cast<integer*>(r));
+		}
+
+		throw new type_error();
+
+	}
+
+
+
+
 };
 
 /// Assign this to its one and only value.
