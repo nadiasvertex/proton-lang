@@ -59,14 +59,7 @@ proton::object* proto_load(std::wstring* name, proton::name_space* ns) {
 //===---------------------------------------------------------------------====//
 // Binary protocol operations
 
-proton::object* proto_add(proton::object *l, proton::object *r) {
-	try {
-		return l->add(r);
-	} catch(proton::exception* e) {
-		jit_exception_throw(e);
-	}
-}
-
+#include "binops.h"
 
 //===---------------------------------------------------------------------====//
 // Query protocol operations

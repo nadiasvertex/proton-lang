@@ -45,10 +45,192 @@ public:
 	// Numeric Methods
 
 	virtual object* add(object* other) {
-		throw new type_error();
+		return not_implemented;
+	}
+
+	virtual object* sub(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* mul(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* truediv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* floordiv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* mod(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* divmod(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* pow(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* lshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* bitwise_and(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* bitwise_or(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* bitwise_xor(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* radd(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rsub(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rmul(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rtruediv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rfloordiv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rmod(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rdivmod(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rpow(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rlshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rrshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rbitwise_and(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rbitwise_or(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* rbitwise_xor(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* iadd(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* isub(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* imul(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* itruediv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ifloordiv(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* imod(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ipow(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ilshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* irshift(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ibitwise_and(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ibitwise_or(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* ibitwise_xor(object* other) {
+		return not_implemented;
+	}
+
+	virtual object* neg() {
+		return not_implemented;
+	}
+
+	virtual object* pos() {
+		return not_implemented;
+	}
+
+	virtual object* abs() {
+		return not_implemented;
+	}
+
+	virtual object* invert() {
+		return not_implemented;
+	}
+
+	virtual object* to_complex() {
+		return not_implemented;
+	}
+
+	virtual object* to_int() {
+		return not_implemented;
+	}
+
+	virtual object* to_float() {
+		return not_implemented;
+	}
+
+	virtual object* to_rounded_int() {
+		return not_implemented;
 	}
 
 	static object *none;
+
+	static object *not_implemented;
 };
 
 /// The garbage collecting allocator for objects, used

@@ -19,9 +19,17 @@ INC_FLAGS = -Isrc/core -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/include -Ideps/
 
 all: proton
 
-test: INCLUDES = $(INC_FLAGS) -Ideps/igloo
-test: $(TEST_OBJS)  
+binops:
+	python src/core/gen_binops.py > src/core/binops.h
+
+test_objects: $(TEST_OBJS)  
 	g++ -g -oproton_test  $< $(LIBS)
+	
+shell_objects:  $(SHELL_OBJS)
+	g++ -oproton  $< $(LIBS)
+
+test: INCLUDES = $(INC_FLAGS) -Ideps/igloo
+test: binops test_objects
 	./proton_test
 
 clean:
@@ -30,5 +38,4 @@ clean:
 	rm -f proton_test	
 
 proton: INCLUDES = $(INC_FLAGS)
-proton: $(SHELL_OBJS)
-	g++ -oproton  $< $(LIBS)
+proton: binops shell_objects

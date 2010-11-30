@@ -91,7 +91,6 @@ Context(IntegerJitOperations)
 		auto result_as_integer = (proton::integer*)call_result;
 
 		Assert::That(result_as_integer->get_int64(), Is().EqualTo(12));
-
 	}
 
 

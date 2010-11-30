@@ -93,6 +93,15 @@ public:
 				(void*) proto_add, binary_fn_sig, args, 2, 0);
 	}
 
+	/// Subtract two objects.
+	jit_value_t sub(jit_value_t l, jit_value_t r) {
+		jit_value_t args[2] = { l, r };
+
+		return jit_insn_call_native(f->jit, "proto_sub",
+				(void*) proto_sub, binary_fn_sig, args, 2, 0);
+	}
+
+
 	void ret(jit_value_t v) {
 		jit_insn_return(f->jit, v);
 	}
