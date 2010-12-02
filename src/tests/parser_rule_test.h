@@ -10,7 +10,7 @@ Context(BasicRules)
 	Spec(RulesCanBeJoined) {
 		auto test = new proton::parser::production("test_production");
 
-		test->r("\n")
+		test->r(proton::parser::newline())
 			->r("test_rule");
 
 		/*std::cout << std::endl;
@@ -31,6 +31,25 @@ Context(BasicRules)
 
 		Assert::That(r.match(it));
 	}
+
+	Spec(IdentifierRuleCanMatch) {
+		proton::parser::identifier r;
+		proton::string input("abcDEF123_654GHIjkl");
+		auto it = input.iterator();
+
+		Assert::That(r.match(it));
+	}
+
+	Spec(ProductionCanMatch) {
+		proton::parser::literal_rule r("my wife");
+		proton::string input("my wife is awesome.");
+		auto it = input.iterator();
+
+		Assert::That(r.match(it));
+	}
+
+
+
 };
 
 

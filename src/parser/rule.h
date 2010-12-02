@@ -4,6 +4,8 @@
 #include "core-internal.h"
 #include "string.h"
 
+#include "unicode/uniset.h"
+
 #include <vector>
 #include <ostream>
 
@@ -31,6 +33,10 @@ public:
 
 	rule(rule_suffix_type _suffix) :
 		suffix(_suffix) {
+	}
+
+	void set_name(const std::string& _name) {
+		name = _name;
 	}
 
 	virtual void dump(std::ostream& s) const {
@@ -72,14 +78,51 @@ public:
 	}
 
 	virtual bool match(wstring_iterator& it) {
-		for(; at.getIndex()!=at.endIndex(); at.next(), it.next())
-		{
-			if (at.current()!=it.current()) {
+		for (; at.getIndex() != at.endIndex(); at.next(), it.next()) {
+			if (at.current() != it.current()) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+};
+
+class identifier : public rule {
+	wstring value;
+
+	UnicodeSet start_pattern, end_pattern;
+public:
+	identifier() : rule("identifier") {
+		UErrorCode err;
+
+		start_pattern.applyPattern("[a-zA-Z_]", err);
+		end_pattern.applyPattern("[a-zA-Z0-9_]", err);
+	}
+
+	virtual uint64_t size() {
+		return value.length();
+	}
+
+	virtual bool match(wstring_iterator& it) {
+		if (!start_pattern.contains(it.current())) {
+			return false;
+		}
+
+		do {
+			value.append(it.current());
+			it.next();
+		} while (end_pattern.contains(it.current()));
+
+		return true;
+	}
+
+};
+
+class newline: public literal_rule {
+public:
+	newline() :
+		literal_rule("\n") {
 	}
 };
 

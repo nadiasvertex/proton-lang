@@ -13,9 +13,9 @@ public:
 
 	production(const std::string& n):rule(n) {}
 
-	production& r(const rule& _r) {
+	production* r(const rule& _r) {
 		rules.push_back(new rule(_r));
-		return *this;
+		return this;
 	}
 
 	production* r(const string& literal) {

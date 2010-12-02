@@ -18,6 +18,9 @@ typedef UnicodeString wstring;
 // Unicode string iterator type;
 typedef StringCharacterIterator wstring_iterator;
 
+// Unicode character type
+typedef UChar wchar;
+
 /// Garbage collected, 8-bit string for creating string literals in some internal APIs
 typedef std::basic_string<char, std::char_traits<char>, gc_allocator<char>> internal_string;
 
