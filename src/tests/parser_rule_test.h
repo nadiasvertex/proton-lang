@@ -13,15 +13,23 @@ Context(BasicRules)
 		test->r("\n")
 			->r("test_rule");
 
-		std::cout << std::endl;
-		test->dump(std::cout);
+		/*std::cout << std::endl;
+		test->dump(std::cout);*/
 	}
 
 	Spec(NonterminalsCanBeCreated) {
 			proton::parser::rule test(std::string("test"));
 
-			std::cout << std::endl;
-			test.dump(std::cout);
+			/*std::cout << std::endl;
+			test.dump(std::cout);*/
+	}
+
+	Spec(LiteralRuleCanMatch) {
+		proton::parser::literal_rule r("my");
+		proton::string input("my wife is awesome.");
+		auto it = input.iterator();
+
+		Assert::That(r.match(it));
 	}
 };
 

@@ -45,6 +45,10 @@ public:
 		return value.length();
 	}
 
+	wstring_iterator iterator() {
+		return wstring_iterator(value);
+	}
+
 	internal_string to_local_str() const;
 	internal_string to_escaped_local_str() const;
 

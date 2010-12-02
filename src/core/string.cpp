@@ -28,7 +28,7 @@ internal_string string::to_local_str() const {
 		// throw an error?
 	}
 
-	return const_cast<const char*>(str);
+	return internal_string(str);
 }
 
 internal_string string::to_escaped_local_str() const {

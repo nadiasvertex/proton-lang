@@ -7,12 +7,7 @@
 #include <vector>
 #include <ostream>
 
-#include <unicode/schriter.h>
-
 namespace proton {
-
-typedef StringCharacterIterator wstring_iterator;
-
 namespace parser {
 
 enum rule_suffix_type {
@@ -54,14 +49,14 @@ public:
 
 class literal_rule: public rule {
 	string to_match;
-	int32_t at;
+	wstring_iterator at;
 public:
 	literal_rule(const string& _to_match) :
-		to_match(_to_match) {
+		to_match(_to_match), at(to_match.iterator()) {
 	}
 
 	literal_rule(const char* literal) :
-		to_match(literal) {
+		to_match(literal), at(to_match.iterator()) {
 	}
 
 	virtual void dump(std::ostream& s) const {
@@ -77,7 +72,14 @@ public:
 	}
 
 	virtual bool match(wstring_iterator& it) {
-		return false;
+		for(; at.getIndex()!=at.endIndex(); at.next(), it.next())
+		{
+			if (at.current()!=it.current()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 };
 
