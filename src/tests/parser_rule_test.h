@@ -25,7 +25,7 @@ Context(BasicRules)
 	}
 
 	Spec(LiteralRuleCanMatch) {
-		proton::parser::literal_rule r("my");
+		proton::parser::literal_rule r("my wife");
 		proton::string input("my wife is awesome.");
 		auto it = input.iterator();
 
