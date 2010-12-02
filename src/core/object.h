@@ -55,7 +55,17 @@ public:
 	//==-------------------------------------------------------------------==/
 	// Basic Methods
 
+	/// Return the "official" string representation of this object.  This
+	/// should look like a valid Python expression if at all possible.
+	/// Must return a string object.
 	virtual object* repr();
+
+	/// Computes an "informal" string representation.  Does not have to be
+	/// valid Python, can be a more convenient or concise representation.
+	/// Must return a string object.
+	virtual object* str() {
+		return repr();
+	}
 
 	//==-------------------------------------------------------------------==/
 	// Numeric Methods

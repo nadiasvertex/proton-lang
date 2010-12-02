@@ -13,6 +13,8 @@
 #include "string.h"
 #include "exception.h"
 
+#include "parser.h"
+
 #include "protocol.h"
 #include "jitter.h"
 #endif

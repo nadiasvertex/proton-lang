@@ -6,6 +6,8 @@
 #include "number_protocol_test.h"
 #include "context_test.h"
 
+#include "parser_rule_test.h"
+
 using namespace igloo;
 
 int main()

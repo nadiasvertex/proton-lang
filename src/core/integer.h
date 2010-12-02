@@ -5,6 +5,7 @@
 
 #include "core-internal.h"
 #include "number.h"
+#include "string.h"
 
 namespace proton {
 
@@ -51,6 +52,17 @@ public:
 
 	uint64 get_uint64() {
 		return mpz_get_ui(value);
+	}
+
+
+	//==-------------------------------------------------------------------==/
+	// Basic Methods
+
+	/// Return the "official" string representation of this object.  This
+	/// should look like a valid Python expression if at all possible.
+	/// Must return a string object.
+	virtual object* repr() {
+		return new string(UNICODE_STRING_SIMPLE(mpz_get_str(NULL, 10, value)));
 	}
 
 	//==-------------------------------------------------------------------==/

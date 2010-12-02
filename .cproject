@@ -27,6 +27,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/proton/deps/gc-7.1/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/proton/deps/libjit-0.1.2/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/proton/deps/gmp-5.0.1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/proton/deps/icu/source/common}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/proton/deps/icu/source/i18n}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.226543059" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -316,6 +318,8 @@
 					</target>
 				</buildTargets>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
