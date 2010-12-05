@@ -27,25 +27,25 @@ Context(BasicRules)
 	Spec(LiteralRuleCanMatch) {
 		proton::parser::literal_rule r("my wife");
 		proton::string input("my wife is awesome.");
-		auto it = input.iterator();
+		auto ctx = proton::parser::context(input.iterator());
 
-		Assert::That(r.match(it));
+		Assert::That(r.match(ctx));
 	}
 
 	Spec(IdentifierRuleCanMatch) {
 		proton::parser::identifier r;
 		proton::string input("abcDEF123_654GHIjkl");
-		auto it = input.iterator();
+		auto ctx = proton::parser::context(input.iterator());
 
-		Assert::That(r.match(it));
+		Assert::That(r.match(ctx));
 	}
 
 	Spec(ProductionCanMatch) {
 		proton::parser::literal_rule r("my wife");
 		proton::string input("my wife is awesome.");
-		auto it = input.iterator();
+		auto ctx = proton::parser::context(input.iterator());
 
-		Assert::That(r.match(it));
+		Assert::That(r.match(ctx));
 	}
 
 

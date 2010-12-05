@@ -45,8 +45,8 @@ public:
 		return value.length();
 	}
 
-	wstring_iterator iterator() {
-		return wstring_iterator(value);
+	wstring_iterator* iterator() {
+		return new wstring_iterator(value);
 	}
 
 	internal_string to_local_str() const;
