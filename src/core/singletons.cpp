@@ -3,6 +3,7 @@
 
 #include "object.h"
 #include "type.h"
+#include "integer.h"
 
 namespace proton {
 
@@ -30,6 +31,9 @@ object* object::none = new object(type::none);
 
 /// The one and only NotImplemented object.
 object* object::not_implemented = new object(type::not_implemented);
+
+/// Assign this to its one and only value.
+integer* integer::zero = new integer();
 
 }
 

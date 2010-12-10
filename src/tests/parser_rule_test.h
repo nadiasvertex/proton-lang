@@ -15,6 +15,23 @@ Context(BasicRules)
 		Assert::That(r.match(ctx));
 	}
 
+	Spec(IdentifierRuleGetsMemoized) {
+		proton::parser::identifier r;
+		proton::string input("abcDEF123_654GHIjkl and stuff");
+		auto ctx = proton::parser::context(*input.iterator());
+
+		// Match out a rule
+		auto n1 = r.match(ctx);
+
+		// Reset and match out the rule again.
+		ctx.seek(0);
+		auto n2 = r.match(ctx);
+
+		Assert::That(n1==n2);
+	}
+
+
+
 
 };
 

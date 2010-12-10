@@ -2,6 +2,8 @@
 #define __PROTON_AST_H_
 
 #include "core-internal.h"
+#include "integer.h"
+
 #include <vector>
 
 namespace proton {
@@ -74,6 +76,13 @@ class ident: public base {
 	string name;
 public:
 	ident(string _name) : name(_name) {
+	}
+};
+
+class integer: public base {
+	proton::integer value;
+public:
+	integer(proton::integer _value) : value(_value) {
 	}
 };
 

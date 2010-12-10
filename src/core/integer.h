@@ -41,6 +41,11 @@ public:
 		mpz_init_set_ui(value, v);
 	}
 
+	integer(const string& s, int base = 10) :
+		number(type::py_int) {
+		mpz_init_set_str(value, s.to_local_str().c_str(), base);
+	}
+
 	~integer() {
 		mpz_clear(value);
 
@@ -53,7 +58,6 @@ public:
 	uint64 get_uint64() {
 		return mpz_get_ui(value);
 	}
-
 
 	//==-------------------------------------------------------------------==/
 	// Basic Methods
@@ -78,7 +82,7 @@ public:
 
 	virtual object* add(object* r) {
 		if (r->is_type(type::py_int)) {
-			return add(static_cast<integer*>(r));
+			return add(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -94,7 +98,7 @@ public:
 
 	virtual object* sub(object* r) {
 		if (r->is_type(type::py_int)) {
-			return sub(static_cast<integer*>(r));
+			return sub(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -110,7 +114,7 @@ public:
 
 	virtual object* mul(object* r) {
 		if (r->is_type(type::py_int)) {
-			return mul(static_cast<integer*>(r));
+			return mul(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -126,7 +130,7 @@ public:
 
 	virtual object* truediv(object* r) {
 		if (r->is_type(type::py_int)) {
-			return truediv(static_cast<integer*>(r));
+			return truediv(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -142,7 +146,7 @@ public:
 
 	virtual object* floordiv(object* r) {
 		if (r->is_type(type::py_int)) {
-			return floordiv(static_cast<integer*>(r));
+			return floordiv(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -158,7 +162,7 @@ public:
 
 	virtual object* mod(object* r) {
 		if (r->is_type(type::py_int)) {
-			return mod(static_cast<integer*>(r));
+			return mod(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -174,7 +178,7 @@ public:
 
 	virtual object* rshift(object* r) {
 		if (r->is_type(type::py_int)) {
-			return rshift(static_cast<integer*>(r));
+			return rshift(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -190,7 +194,7 @@ public:
 
 	virtual object* lshift(object* r) {
 		if (r->is_type(type::py_int)) {
-			return lshift(static_cast<integer*>(r));
+			return lshift(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -206,7 +210,7 @@ public:
 
 	virtual object* bitwise_and(object* r) {
 		if (r->is_type(type::py_int)) {
-			return bitwise_and(static_cast<integer*>(r));
+			return bitwise_and(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -222,7 +226,7 @@ public:
 
 	virtual object* bitwise_or(object* r) {
 		if (r->is_type(type::py_int)) {
-			return bitwise_or(static_cast<integer*>(r));
+			return bitwise_or(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
@@ -238,15 +242,12 @@ public:
 
 	virtual object* bitwise_xor(object* r) {
 		if (r->is_type(type::py_int)) {
-			return bitwise_xor(static_cast<integer*>(r));
+			return bitwise_xor(static_cast<integer*> (r));
 		}
 
 		throw new type_error();
 	}
 };
-
-/// Assign this to its one and only value.
-integer* integer::zero = new integer();
 
 }
 

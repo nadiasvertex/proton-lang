@@ -15,7 +15,7 @@ namespace proton {
 namespace parser {
 
 enum rule_type {
-	IDENTIFIER, BINOP
+	IDENTIFIER, INTEGER, FLOAT, BINOP
 };
 
 /*****************************************************************************
@@ -103,7 +103,7 @@ public:
 	}
 
 	/// Return the current glyph.
-	wchar current() {
+	wchar current() const {
 		return it.current();
 	}
 
@@ -168,12 +168,17 @@ public:
 	}
 };
 
+/// Rule to match an identifer.
 class identifier : public rule {
 	static UnicodeSet start_pattern;
 	static UnicodeSet end_pattern;
 	static bool initialized;
 
 	wstring value;
+
+protected:
+	virtual ast::base* do_match(context& ctx);
+
 public:
 	identifier() : rule(IDENTIFIER) {
 		if (!initialized) {
@@ -184,20 +189,40 @@ public:
 			end_pattern.applyPattern("[a-zA-Z0-9_]", status);
 		}
 	}
+};
 
-	virtual ast::base* do_match(context& ctx) {
-		/// See if the match works.
-		if (!start_pattern.contains(ctx.current())) {
-			return NULL;
+/// Rule to match an integer
+class integer : public rule {
+	static UnicodeSet start_pattern;
+	static UnicodeSet end_pattern;
+	static bool initialized;
+
+	wstring value;
+
+protected:
+	virtual ast::base* do_match(context& ctx);
+
+public:
+	integer() : rule(INTEGER) {
+		if (!initialized) {
+			initialized = true;
+			UErrorCode status = U_ZERO_ERROR;
+
+			start_pattern.applyPattern("[xb]", status);
+			end_pattern.applyPattern("[0-9]", status);
 		}
-
-		do {
-			value.append(ctx.current());
-			ctx.next();
-		} while(end_pattern.contains(ctx.current()));
-
-		return new ast::ident(value);
 	}
+};
+
+
+class binop : public rule {
+protected:
+	virtual ast::base* do_match(context& ctx) {
+
+	}
+
+public:
+	binop() : rule(BINOP) {}
 };
 
 } // end parser namespace
