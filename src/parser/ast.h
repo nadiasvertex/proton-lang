@@ -80,10 +80,12 @@ public:
 };
 
 class integer: public base {
-	proton::integer value;
+	proton::integer the_value;
 public:
-	integer(proton::integer _value) : value(_value) {
+	integer(proton::integer _value) : the_value(_value) {
 	}
+
+	proton::integer value() { return the_value; }
 };
 
 class add: public base {

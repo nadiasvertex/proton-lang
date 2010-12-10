@@ -38,6 +38,48 @@ Context(BasicRules)
 			Assert::That(r.match(ctx));
 	}
 
+	Spec(IntegerRuleCanMatchHex) {
+			proton::parser::integer r;
+			proton::string input("0x10");
+			auto ctx = proton::parser::context(*input.iterator());
+
+			auto n = (proton::ast::integer*)r.match(ctx);
+			Assert::That(n);
+			Assert::That(n->value().get_int64()==0x10);
+	}
+
+	Spec(IntegerRuleCanMatchOct) {
+			proton::parser::integer r;
+			proton::string input("010");
+			auto ctx = proton::parser::context(*input.iterator());
+
+			auto n = (proton::ast::integer*)r.match(ctx);
+			Assert::That(n);
+			Assert::That(n->value().get_int64()==010);
+	}
+
+	Spec(IntegerRuleCanMatchBin) {
+			proton::parser::integer r;
+			proton::string input("0b10");
+			auto ctx = proton::parser::context(*input.iterator());
+
+			auto n = (proton::ast::integer*)r.match(ctx);
+			Assert::That(n);
+			Assert::That(n->value().get_int64()==2);
+	}
+
+	Spec(IntegerRuleCanMatchDec) {
+			proton::parser::integer r;
+			proton::string input("10");
+			auto ctx = proton::parser::context(*input.iterator());
+
+			auto n = (proton::ast::integer*)r.match(ctx);
+			Assert::That(n);
+			Assert::That(n->value().get_int64()==10);
+	}
+
+
+
 	Spec(IntegerRuleGetsMemoized) {
 		proton::parser::integer r;
 		proton::string input("1234567 + 45345");
