@@ -39,7 +39,7 @@ enum rule_type {
 typedef std::pair<rule_type, int32_t> memo_key;
 
 /// The map type for the parse context's memo.
-typedef std::map<memo_key, base::ast*, std::less<memo_key>, gc_allocator<
+typedef std::map<memo_key, ast::base*, std::less<memo_key>, gc_allocator<
 		memo_key>> memo_map;
 
 class context : public gc {
@@ -58,21 +58,24 @@ public:
 	context(wstring_iterator& _it) : cur_line(1), cur_col(1), it(_it) {}
 
 	/// Get the current line number
-	int line() { return cur_line; }
+	int line() {return cur_line;}
 
 	/// Get the current column.
-	int col()  { return cur_col; }
+	int col() {return cur_col;}
 
 	/// Get the current glyph index.
-	int index() { return it.getIndex(); }
+	int index() {return it.getIndex();}
+
+	/// Set the current glyph index.
+	void seek(int index) {it.setIndex(index);}
 
 	/// Store a node into the memo
-	void store(rule_type rule_id, base::ast* node) {
-		memo[std::make_pair(rule_id, node->index())] = node;
+	void store(rule_type rule_id, ast::base* node) {
+		memo[std::make_pair(rule_id, node->start_index())] = node;
 	}
 
 	/// Load a node from the memo
-	base::ast* load(rule_type rule_id, int32_t index) {
+	ast::base* load(rule_type rule_id, int32_t index) {
 		auto it = memo.find(std::make_pair(rule_id, index));
 
 		if (it==memo.end()) {
@@ -117,7 +120,7 @@ class rule : public gc {
 protected:
 	rule(rule_type _rt) : rt(_rt) {}
 
-	void set_ast_pos(base::ast* node) {
+	void set_ast_pos(ast::base* node) {
 		node->set_pos(start_match_line, start_match_col, start_match_index);
 		node->set_end_pos(end_match_index);
 	}
@@ -133,25 +136,29 @@ protected:
 	}
 
 protected:
-	virtual base::ast* do_match(context& ctx)=0;
+	virtual ast::base* do_match(context& ctx)=0;
 
 public:
-	base::ast* match(context& ctx) {
+	ast::base* match(context& ctx) {
 		/// See if we already have a memoized match.
 		auto node = ctx.load(rt, ctx.index());
 
 		/// Early out: match was already done in the past.
 		if (node) {
+			ctx.seek(node->end_index());
 			return node;
 		}
 
+		/// Perform pre-match operations
 		start(ctx);
 
 		/// Try to match
-		node = do_match();
+		node = do_match(ctx);
 
+		/// Perform post-match operations
 		end(ctx);
 
+		/// Memoize if we got something back.
 		if (node) {
 			set_ast_pos(node);
 			ctx.store(rt, node);
@@ -165,6 +172,8 @@ class identifier : public rule {
 	static UnicodeSet start_pattern;
 	static UnicodeSet end_pattern;
 	static bool initialized;
+
+	wstring value;
 public:
 	identifier() : rule(IDENTIFIER) {
 		if (!initialized) {
@@ -176,14 +185,20 @@ public:
 		}
 	}
 
-	virtual base::ast* do_match(context& ctx) {
+	virtual ast::base* do_match(context& ctx) {
+		/// See if the match works.
+		if (!start_pattern.contains(ctx.current())) {
+			return NULL;
+		}
 
+		do {
+			value.append(ctx.current());
+			ctx.next();
+		} while(end_pattern.contains(ctx.current()));
 
-
-		return new
+		return new ast::ident(value);
 	}
 };
-
 
 } // end parser namespace
 } // end proton namespace

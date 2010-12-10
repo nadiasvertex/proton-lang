@@ -11,7 +11,7 @@ namespace ast {
 class base: public gc {
 	int32_t line_num;
 	int32_t col_num;
-	int32_t start_index, end_index;
+	int32_t the_start_index, the_end_index;
 
 protected:
 	/// The parent ast, if one exists.
@@ -33,33 +33,33 @@ public:
 	void set_pos(int _line, int _col, int _index) {
 		line_num = _line;
 		col_num = _col;
-		start_index = _index;
+		the_start_index = _index;
 	}
 
 	/// Set the last read position in the input stream
 	/// for this ast.
 	void set_end_pos(int _end_index) {
-		end_index = _end_index;
+		the_end_index = _end_index;
 	}
 
 	/// Provides the line number where this ast was matched.
-	inline int line() {
+	inline int line() const {
 		return line_num;
 	}
 
 	/// Provides the column number where this ast was matched.
-	inline int col() {
+	inline int col() const {
 		return col_num;
 	}
 
 	/// Provides the input index where this ast was matched.
-	inline int index() {
-		return start_index;
+	inline int start_index() const {
+		return the_start_index;
 	}
 
 	/// Provides the input index where the match for this ast stopped.
-	inline int end_index() {
-		return end_index;
+	inline int end_index() const {
+		return the_end_index;
 	}
 
 	/// Set the ast which is a parent to this ast.
@@ -73,8 +73,7 @@ typedef std::vector<base*, gc_allocator<base*>> ast_list;
 class ident: public base {
 	string name;
 public:
-	ident(string _name, int _line, int _col) :
-	base(_line, _col), name(_name) {
+	ident(string _name) : name(_name) {
 	}
 };
 

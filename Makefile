@@ -1,7 +1,7 @@
 
 SHELL_OBJS = src/shell/main.o
 TEST_OBJS  = src/tests/main.o
-CORE_OBJS  = src/core/object.o src/core/singletons.o src/core/string.o
+CORE_OBJS  = src/core/object.o src/core/singletons.o src/core/string.o src/parser/rule.o
 
 GC_LIBS  = -Ldeps/gc-7.1/.libs -lgc -lgccpp
 JIT_LIBS = -Ldeps/libjit-0.1.2/jit/.libs -ljit 
