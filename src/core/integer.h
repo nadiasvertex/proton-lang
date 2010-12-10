@@ -41,7 +41,7 @@ public:
 		mpz_init_set_ui(value, v);
 	}
 
-	integer(const string& s, int base = 10) :
+	integer(const string& s, int base=10) :
 		number(type::py_int) {
 		mpz_init_set_str(value, s.to_local_str().c_str(), base);
 	}
