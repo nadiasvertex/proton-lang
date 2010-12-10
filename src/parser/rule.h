@@ -15,268 +15,173 @@ namespace proton {
 namespace parser {
 
 enum rule_type {
-	IDENTIFIER, ADD
+	IDENTIFIER, BINOP
 };
 
-/// The key for memos.
+/*****************************************************************************
+ * Control flow for the Parser
+ *
+ * There are two pieces: a rule and an ast node.  A rule knows how to match
+ * a grammar element, and how to generate an ast.  It also knows how to
+ * store the ast into the memo map.
+ *
+ * A parse occurs by matching a rule.  If the rule matches, it generates an
+ * ast.  If the rule requires additional rules to match to those rules are
+ * matched as well.  Once the rule matches completely the ast is memoized
+ * at the root.  The rule returns this root.
+ *
+ * When a match occurs, the matching rule generates an ast and locks it to
+ * the line, column, and index where the match started.
+ */
+
+/// The key that the parser uses to find an ast from
+/// some input that may have already been matched.
 typedef std::pair<rule_type, int32_t> memo_key;
 
-/// The actual map for memos
-typedef std::map<memo_key, ast::base*, std::less<memo_key>, gc_allocator<std::pair<memo_key, ast::base*>>> memo;
+/// The map type for the parse context's memo.
+typedef std::map<memo_key, base::ast*, std::less<memo_key>, gc_allocator<
+		memo_key>> memo_map;
 
-/// The parser context, keeps a reference to where we are in the
-/// input stream, as well as the parser memo.
 class context : public gc {
-	int line_num;
-	int col_num;
+	/// The current line
+	int cur_line;
 
-	wstring_iterator* it;
+	/// The current column
+	int cur_col;
 
-	memo *m;
+	/// The input iterator to use.
+	wstring_iterator& it;
+
+	/// The memo
+	memo_map memo;
 public:
-	context(wstring_iterator* _it):line_num(1), col_num(1), it(_it) {}
+	context(wstring_iterator& _it) : cur_line(1), cur_col(1), it(_it) {}
 
-	context clone() {
-		context n(*this);
-		n.it = (wstring_iterator*)it->clone();
+	/// Get the current line number
+	int line() { return cur_line; }
 
-		return n;
+	/// Get the current column.
+	int col()  { return cur_col; }
+
+	/// Get the current glyph index.
+	int index() { return it.getIndex(); }
+
+	/// Store a node into the memo
+	void store(rule_type rule_id, base::ast* node) {
+		memo[std::make_pair(rule_id, node->index())] = node;
 	}
 
-	inline int line() { return line_num; }
-	inline int col()  { return col_num; }
-	inline int index() { return it->getIndex(); }
+	/// Load a node from the memo
+	base::ast* load(rule_type rule_id, int32_t index) {
+		auto it = memo.find(std::make_pair(rule_id, index));
 
-	/// Advance the iterator
-	inline wchar next() {
-		++col_num;
-
-		return it->next();
-	}
-
-	/// Get the current character
-	inline wchar current() {
-		return it->current();
-	}
-
-	/// Bump the row indicator.
-	void newline() {
-		++line_num;
-	}
-};
-
-enum rule_suffix_type {
-	ONE_OR_NONE, ONE_OR_MORE, ZERO_OR_MORE
-};
-
-/// A single matching rule
-class rule: public gc {
-	rule_suffix_type suffix;
-
-protected:
-	int match_start_line;
-	int match_end_line;
-
-	int match_start_col;
-	int match_end_col;
-
-	int match_start_index;
-	int match_end_index;
-
-protected:
-	std::string name;
-
-public:
-	rule() {
-	}
-
-	rule(const std::string& _name) :
-		name(_name) {
-	}
-
-	rule(rule_suffix_type _suffix) :
-		suffix(_suffix) {
-	}
-
-	void set_name(const std::string& _name) {
-		name = _name;
-	}
-
-	void set_match_start(context& ctx) {
-		match_start_line = ctx.line();
-		match_start_col = ctx.col();
-		match_start_index = ctx.index();
-	}
-
-	void set_match_end(context& ctx) {
-		match_end_line = ctx.line();
-		match_end_col = ctx.col();
-		match_end_index = ctx.index();
-	}
-
-	virtual void dump(std::ostream& s) const {
-		s << name;
-	}
-
-	virtual ast::base* to_ast() {
-		return 0;
-	}
-
-	virtual uint64_t size() {
-		return 0;
-	}
-
-	virtual bool match(context& ctx) {
-		return false;
-	}
-
-};
-
-class literal_rule: public rule {
-	string to_match;
-public:
-	literal_rule(const string& _to_match) :
-		to_match(_to_match) {
-	}
-
-	literal_rule(const char* literal) :
-		to_match(literal) {
-	}
-
-	virtual void dump(std::ostream& s) const {
-		s << "'" << to_match.to_escaped_local_str() << "'";
-	}
-
-	void set_literal(string s) {
-		to_match = s;
-	}
-
-	virtual uint64_t size() {
-		return to_match.get_length();
-	}
-
-	virtual bool match(context& ctx) {
-		auto at = to_match.iterator();
-
-		set_match_start(ctx);
-
-		for (; at->getIndex() != at->endIndex(); at->next(), ctx.next()) {
-			if (at->current() != ctx.current()) {
-				return false;
-			}
+		if (it==memo.end()) {
+			return NULL;
 		}
 
-		set_match_end(ctx);
+		return it->second;
+	}
 
-		return true;
+	/// Get the next glyph.
+	wchar next() {
+		auto v = it.next();
+		switch(v) {
+			case '\n':
+			++cur_line;
+			cur_col=1;
+			break;
+
+			default:
+			++cur_col;
+			break;
+		}
+
+		return v;
+	}
+
+	/// Return the current glyph.
+	wchar current() {
+		return it.current();
+	}
+
+};
+
+class rule : public gc {
+	int start_match_line;
+	int start_match_col;
+	int start_match_index;
+	int end_match_index;
+
+	rule_type rt;
+
+protected:
+	rule(rule_type _rt) : rt(_rt) {}
+
+	void set_ast_pos(base::ast* node) {
+		node->set_pos(start_match_line, start_match_col, start_match_index);
+		node->set_end_pos(end_match_index);
+	}
+
+	void start(context& ctx) {
+		start_match_line = ctx.line();
+		start_match_col = ctx.col();
+		start_match_index = ctx.index();
+	}
+
+	void end(context& ctx) {
+		end_match_index = ctx.index();
+	}
+
+protected:
+	virtual base::ast* do_match(context& ctx)=0;
+
+public:
+	base::ast* match(context& ctx) {
+		/// See if we already have a memoized match.
+		auto node = ctx.load(rt, ctx.index());
+
+		/// Early out: match was already done in the past.
+		if (node) {
+			return node;
+		}
+
+		start(ctx);
+
+		/// Try to match
+		node = do_match();
+
+		end(ctx);
+
+		if (node) {
+			set_ast_pos(node);
+			ctx.store(rt, node);
+		}
+
+		return node;
 	}
 };
 
 class identifier : public rule {
-	wstring value;
-
-	UnicodeSet start_pattern, end_pattern;
+	static UnicodeSet start_pattern;
+	static UnicodeSet end_pattern;
+	static bool initialized;
 public:
-	identifier() : rule("identifier") {
-		UErrorCode err = U_ZERO_ERROR;
+	identifier() : rule(IDENTIFIER) {
+		if (!initialized) {
+			initialized = true;
+			UErrorCode status = U_ZERO_ERROR;
 
-		start_pattern.applyPattern("[a-zA-Z_]", err);
-		end_pattern.applyPattern("[a-zA-Z0-9_]", err);
-	}
-
-	virtual uint64_t size() {
-		return value.length();
-	}
-
-	virtual ast::base* to_ast() {
-		return new ast::ident(value, match_start_line, match_start_col);
-	}
-
-	virtual bool match(context& ctx) {
-		if (!start_pattern.contains(ctx.current())) {
-			return false;
-		}
-
-		set_match_start(ctx);
-
-		do {
-			value.append(ctx.current());
-			ctx.next();
-		} while (end_pattern.contains(ctx.current()));
-
-		set_match_end(ctx);
-
-		return true;
-	}
-};
-
-class binop : public rule {
-	UnicodeSet pattern;
-
-	wchar op;
-public:
-	binop() : rule("binop") {
-		UErrorCode err = U_ZERO_ERROR;
-
-		pattern.applyPattern("[+-*/^&|]", err);
-	}
-
-	virtual uint64_t size() {
-		return 1;
-	}
-
-	virtual ast::base* to_ast() {
-		switch(op) {
-		case '+' :
-			return new ast::add();
+			start_pattern.applyPattern("[a-zA-Z_]", status);
+			end_pattern.applyPattern("[a-zA-Z0-9_]", status);
 		}
 	}
 
-	virtual bool match(context& ctx) {
-
-		set_match_start(ctx);
+	virtual base::ast* do_match(context& ctx) {
 
 
-		if (!pattern.contains(ctx.current())) {
-			return false;
-		}
 
-		op = ctx.current();
-		ctx.next();
-
-		set_match_end(ctx);
-
-		return true;
+		return new
 	}
-};
-
-
-class newline: public literal_rule {
-public:
-	newline() :
-		literal_rule("\n") {
-	}
-
-	virtual bool match(context& ctx) {
-		if (literal_rule::match(ctx)) {
-			ctx.newline();
-			return true;
-		}
-
-		return false;
-	}
-};
-
-class plus: public literal_rule {
-public:
-	plus() :
-		literal_rule("+") {
-	}
-};
-
-class expr: public rule {
-public:
-	virtual bool match(context &ctx);
 };
 
 
