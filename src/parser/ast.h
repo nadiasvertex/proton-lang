@@ -88,14 +88,15 @@ public:
 	proton::integer value() { return the_value; }
 };
 
-class add: public base {
+class binop: public base {
+	wchar op;
 	base* left;
 	base* right;
 public:
-	add() {}
+	binop() {}
 
-	add(base* l, base* r) :
-	left(l), right(r) {
+	binop(wchar _op, base* l, base* r) :
+	op(_op), left(l), right(r) {
 		l->set_parent(this);
 		r->set_parent(this);
 	}

@@ -15,7 +15,7 @@ namespace proton {
 namespace parser {
 
 enum rule_type {
-	IDENTIFIER, INTEGER, FLOAT, BINOP
+	IDENTIFIER, INTEGER, FLOAT, BINOP, PRIMARY_EXPR, EXPR
 };
 
 /*****************************************************************************
@@ -107,6 +107,20 @@ public:
 		return it.current();
 	}
 
+	/// Eat whitespace glyphs
+	void skip_ws() {
+		auto skip=true;
+		do {
+			switch(it.current()) {
+			case ' ':
+			case '\t': it.next(); break;
+			default:
+				skip=false;
+				break;
+			}
+		} while(skip);
+	}
+
 };
 
 class rule : public gc {
@@ -162,6 +176,10 @@ public:
 		if (node) {
 			set_ast_pos(node);
 			ctx.store(rt, node);
+		} else {
+			// Restore the seek position since
+			// we probably messed it up.
+			ctx.seek(start_match_index);
 		}
 
 		return node;
@@ -193,8 +211,7 @@ public:
 
 /// Rule to match an integer
 class integer : public rule {
-	static UnicodeSet start_pattern;
-	static UnicodeSet end_pattern;
+	static UnicodeSet pattern;
 	static bool initialized;
 
 	wstring value;
@@ -208,22 +225,36 @@ public:
 			initialized = true;
 			UErrorCode status = U_ZERO_ERROR;
 
-			start_pattern.applyPattern("[xb]", status);
-			end_pattern.applyPattern("[0-9]", status);
+			pattern.applyPattern("[0-9]", status);
 		}
 	}
 };
 
-
 class binop : public rule {
 protected:
-	virtual ast::base* do_match(context& ctx) {
-
-	}
+	virtual ast::base* do_match(context& ctx);
 
 public:
 	binop() : rule(BINOP) {}
 };
+
+class primary_expr : public rule {
+protected:
+	virtual ast::base* do_match(context& ctx);
+
+public:
+	primary_expr() : rule(PRIMARY_EXPR) {}
+};
+
+
+class expr : public rule {
+protected:
+	virtual ast::base* do_match(context& ctx);
+
+public:
+	expr() : rule(EXPR) {}
+};
+
 
 } // end parser namespace
 } // end proton namespace

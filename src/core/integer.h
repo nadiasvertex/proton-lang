@@ -48,8 +48,7 @@ public:
 	integer(const string& s, int base=10) :
 		number(type::py_int) {
 		auto str = s.to_local_str().c_str();
-		auto result = mpz_init_set_str(value, str, base);
-		if (result==0) return;
+		mpz_init_set_str(value, str, base);
 	}
 
 	~integer() {
