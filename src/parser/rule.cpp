@@ -8,8 +8,7 @@ UnicodeSet identifier::start_pattern;
 UnicodeSet identifier::end_pattern;
 
 bool integer::initialized = false;
-UnicodeSet integer::start_pattern;
-UnicodeSet integer::end_pattern;
+UnicodeSet integer::pattern;
 
 /// Match identifier
 ast::base* identifier::do_match(context& ctx) {
@@ -62,16 +61,6 @@ ast::base* integer::do_match(context& ctx) {
 
 /// Match a binary operation
 ast::base* binop::do_match(context& ctx) {
-	primary_expr lrule();
-
-	// Try to match a primary expression
-	auto l = lrule.match(ctx);
-
-	// If that fails, then we must not have a binop here.
-	if (!l) {
-		return NULL;
-	}
-
 	// So far we have a left side.  Now we need something to do.
 	wchar op_type;
 
@@ -85,6 +74,7 @@ ast::base* binop::do_match(context& ctx) {
 	case '|':
 	case '&':
 		op_type = ctx.current();
+		ctx.next();
 		break;
 
 		// Not a binop
@@ -95,50 +85,56 @@ ast::base* binop::do_match(context& ctx) {
 	// Finally, we need a right side.
 	ctx.skip_ws();
 
-	expr rexpr_rule();
-	auto r = rexpr_rule.match(ctx);
+	expr rrule;
+	auto r = rrule.match(ctx);
 
 	if (!r) {
 		return NULL;
 	}
 
-	return new ast::binop(op_type, l, r);
+	return new ast::binop(op_type, NULL, r);
 }
 
 ast::base* primary_expr::do_match(context& ctx) {
-	identifier ident_rule();
-	integer int_rule();
+	identifier ident_rule;
+	integer int_rule;
 
 	// First try to match an identifer
-	auto l = ident_rule.match(ctx);
+	auto n = ident_rule.match(ctx);
 
 	// If that fails, try a number
-	if (!l) {
-		l = int_rule.match(ctx);
+	if (!n) {
+		n = int_rule.match(ctx);
 	}
 
 	// If that fails, then we must not have a primary_expr
-	if (!l) {
+	if (!n) {
 		return NULL;
 	}
 
-	return l;
+	return n;
 }
 
 ast::base* expr::do_match(context& ctx) {
-	binop binop_rule();
 
-	// First try a binary op.
+	// If that didn't work, try a primary expr
+	primary_expr pe_rule;
+	auto l = pe_rule.match(ctx);
+	if (l==NULL) {
+		return NULL;
+	}
+
+	// Now try a binop
+	binop binop_rule;
 	auto n = binop_rule.match(ctx);
 	if (n!=NULL) {
+		((ast::binop*)n)->set_left(l);
 		return n;
 	}
 
-	// If that didn't work, try a primary expr
-	primary_expr pe_rule();
-	n = pe_rule.match(ctx);
-	if (n!=NULL) {
-		return n;
+	// Only matched a primary expression.
+	if (l) {
+		return l;
 	}
 
 	// Not an expression.

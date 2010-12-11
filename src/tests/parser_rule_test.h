@@ -101,6 +101,14 @@ Context(BasicRules)
 		Assert::That(n1==n2);
 	}
 
+	Spec(ExprRuleCanMatchBinop) {
+			proton::parser::expr r;
+			proton::string input("5+10");
+			auto ctx = proton::parser::context(*input.iterator());
+
+			Assert::That(r.match(ctx));
+	}
+
 
 
 

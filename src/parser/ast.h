@@ -95,10 +95,19 @@ class binop: public base {
 public:
 	binop() {}
 
-	binop(wchar _op, base* l, base* r) :
-	op(_op), left(l), right(r) {
-		l->set_parent(this);
-		r->set_parent(this);
+	binop(wchar _op, base* l, base* r) : op(_op) {
+		set_left(l);
+		set_right(r);
+	}
+
+	void set_left(base* l) {
+		left = l;
+		if (l) l->set_parent(this);
+	}
+
+	void set_right(base *r) {
+		right = r;
+		if (r) r->set_parent(this);
 	}
 };
 
