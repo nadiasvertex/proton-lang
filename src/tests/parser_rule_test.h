@@ -45,7 +45,9 @@ Context(BasicRules)
 
 			auto n = (proton::ast::integer*)r.match(ctx);
 			Assert::That(n);
-			Assert::That(n->value().get_int64()==0x10);
+
+			auto v = n->value().get_int64();
+			Assert::That(v==0x10);
 	}
 
 	Spec(IntegerRuleCanMatchOct) {
@@ -55,7 +57,9 @@ Context(BasicRules)
 
 			auto n = (proton::ast::integer*)r.match(ctx);
 			Assert::That(n);
-			Assert::That(n->value().get_int64()==010);
+
+			auto v = n->value().get_int64();
+			Assert::That(v==010);
 	}
 
 	Spec(IntegerRuleCanMatchBin) {
@@ -65,7 +69,9 @@ Context(BasicRules)
 
 			auto n = (proton::ast::integer*)r.match(ctx);
 			Assert::That(n);
-			Assert::That(n->value().get_int64()==2);
+
+			auto v = n->value().get_int64();
+			Assert::That(v==2);
 	}
 
 	Spec(IntegerRuleCanMatchDec) {
@@ -75,10 +81,10 @@ Context(BasicRules)
 
 			auto n = (proton::ast::integer*)r.match(ctx);
 			Assert::That(n);
-			Assert::That(n->value().get_int64()==10);
+
+			auto v = n->value().get_int64();
+			Assert::That(v==10);
 	}
-
-
 
 	Spec(IntegerRuleGetsMemoized) {
 		proton::parser::integer r;

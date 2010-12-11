@@ -21,6 +21,10 @@ public:
 		mpz_init(value);
 	}
 
+	integer(const integer& o) : number(type::py_int) {
+		mpz_init_set(value, o.value);
+	}
+
 	integer(proton::int32 v) :
 		number(type::py_int) {
 		mpz_init_set_si(value, v);
@@ -43,7 +47,9 @@ public:
 
 	integer(const string& s, int base=10) :
 		number(type::py_int) {
-		mpz_init_set_str(value, s.to_local_str().c_str(), base);
+		auto str = s.to_local_str().c_str();
+		auto result = mpz_init_set_str(value, str, base);
+		if (result==0) return;
 	}
 
 	~integer() {
