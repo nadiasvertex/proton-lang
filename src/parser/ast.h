@@ -7,6 +7,9 @@
 #include <vector>
 
 namespace proton {
+
+class jitter;
+
 namespace ast {
 
 /// The base ast type - provides pieces for all ast objects.
@@ -68,6 +71,9 @@ public:
 	void set_parent(base* _parent) {
 		parent = _parent;
 	}
+
+	/// Compile this node into the jit.
+	virtual jit_value_t compile(jitter* j)=0;
 };
 
 typedef std::vector<base*, gc_allocator<base*>> ast_list;
@@ -77,6 +83,9 @@ class ident: public base {
 public:
 	ident(string _name) : name(_name) {
 	}
+
+	/// Compile this node into the jit.
+	virtual jit_value_t compile(jitter* j);
 };
 
 class integer: public base {
@@ -86,6 +95,9 @@ public:
 	}
 
 	proton::integer value() { return the_value; }
+
+	/// Compile this node into the jit.
+	virtual jit_value_t compile(jitter* j);
 };
 
 class binop: public base {
@@ -109,6 +121,9 @@ public:
 		right = r;
 		if (r) r->set_parent(this);
 	}
+
+	/// Compile this node into the jit.
+	virtual jit_value_t compile(jitter* j);
 };
 
 }

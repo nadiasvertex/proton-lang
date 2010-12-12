@@ -80,7 +80,36 @@ Context(IntegerJit{cap_op})
 }};
 """
 
-with open(sys.argv[1], "w") as out:    
+###======-----------------------------------------------------------------------------===========###
+# Protocol code generation for binops
+
+proto_h = sys.argv[1]+".h"
+proto_c = sys.argv[1]+".cpp"
+
+with open(proto_h, "w") as out:    
+    for op in binops:
+        if op!="pow":
+            func = """proton::object* proto_{op}(proton::object *l, proton::object *r);\n"""
+        else:
+            func = """proton::object* proto_{op}(proton::object *l, proton::object *r);\n"""
+        
+        out.write("/// Performs %s on l, if l does not support the operation it tries the\n" % op)
+        out.write("/// reverse operation on r.\n")
+        out.write(func.format(op=op))
+    
+    for op in inplace_ops:
+        if op!="pow":
+            func = """proton::object* proto_i{op}(proton::object *l, proton::object *r);\n"""
+        else:
+            func = """proton::object* proto_i{op}(proton::object *l, proton::object *r);\n"""
+        
+        out.write("/// Performs inplace %s on l, if l does not support the operation it tries the\n" % op)
+        out.write("/// normal version of the operation.  If that fails, it tries the reverse operation on r.\n")
+        out.write(func.format(op=op))
+        
+with open(proto_c, "w") as out:
+    out.write("// Automatically generated - do not edit.\n")
+    out.write('#include "proton.h"\n\n')    
     for op in binops:
         if op!="pow":
             func = """proton::object* proto_{op}(proton::object *l, proton::object *r) {{
@@ -139,11 +168,36 @@ with open(sys.argv[1], "w") as out:
         out.write("/// normal version of the operation.  If that fails, it tries the reverse operation on r.\n")
         out.write(func.format(op=op))
 
-with open(sys.argv[2], "w") as out:
+
+###======-----------------------------------------------------------------------------===========###
+# Jitter code generation for binops
+
+jitter_h = sys.argv[2]+".h"
+jitter_c = sys.argv[2]+".cpp"
+
+with open(jitter_h, "w") as out:
     for op in binops:
         func = """
     /// {op} two objects.
-    jit_value_t {op}(jit_value_t l, jit_value_t r) {{
+    jit_value_t {op}(jit_value_t l, jit_value_t r);\n"""
+    
+        out.write(func.format(op=op))
+
+    for op in inplace_ops:
+        func = """
+    /// in-place {op} two objects.
+    jit_value_t i{op}(wstring lname, jit_value_t r);"""
+    
+        out.write(func.format(op=op))
+
+with open(jitter_c, "w") as out:
+    out.write("// Automatically generated - do not edit.\n")
+    out.write('#include "proton.h"\n')
+    out.write('namespace proton {\n')
+    for op in binops:
+        func = """
+    /// {op} two objects.
+    jit_value_t jitter::{op}(jit_value_t l, jit_value_t r) {{
         jit_value_t args[2] = {{ l, r }};
     
         return jit_insn_call_native(f->jit, "proto_{op}",
@@ -156,7 +210,7 @@ with open(sys.argv[2], "w") as out:
     for op in inplace_ops:
         func = """
     /// in-place {op} two objects.
-    jit_value_t i{op}(wstring lname, jit_value_t r) {{
+    jit_value_t jitter::i{op}(wstring lname, jit_value_t r) {{
         // Get the object bound to the name.
         auto l = load(lname);
     
@@ -173,6 +227,8 @@ with open(sys.argv[2], "w") as out:
 """
     
         out.write(func.format(op=op))
+        
+    out.write('} // end namespace proton\n')
  
 with open(sys.argv[3], "w") as out:
     for op in binops:

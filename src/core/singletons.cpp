@@ -35,6 +35,34 @@ object* object::not_implemented = new object(type::not_implemented);
 /// Assign this to its one and only value.
 integer* integer::zero = new integer();
 
+/// The parameter signature for a Python function
+jit_type_t python_fn_sig_parms[1] = { jit_type_void_ptr };
+
+/// The function signature for a Python function
+jit_type_t python_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr,
+		python_fn_sig_parms, 1, 1);
+
+/// The parameter signature for a query message
+jit_type_t query_fn_sig_parms[1] = { jit_type_void_ptr };
+
+/// The function signature for a Python function
+jit_type_t query_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_sys_bool,
+		query_fn_sig_parms, 1, 1);
+
+/// The parameter signature for a binary message
+jit_type_t binary_fn_sig_parms[2] = { jit_type_void_ptr, jit_type_void_ptr };
+
+/// The function signature for a binary operation
+jit_type_t binary_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr,
+		binary_fn_sig_parms, 2, 1);
+
+/// The parameter signature for a store message
+jit_type_t store_fn_sig_parms[3] = { jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr };
+
+/// The function signature for a store message
+jit_type_t store_fn_sig = jit_type_create_signature(jit_abi_cdecl, jit_type_void,
+		store_fn_sig_parms, 3, 1);
+
 }
 
 #endif /* SINGLETONS_H_ */

@@ -49,6 +49,11 @@ public:
 		return new wstring_iterator(value);
 	}
 
+	/// Provides the raw value of the internal object.
+	wstring raw_value() {
+		return value;
+	}
+
 	internal_string to_local_str() const;
 	internal_string to_escaped_local_str() const;
 

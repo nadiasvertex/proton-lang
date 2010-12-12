@@ -109,6 +109,16 @@ Context(BasicRules)
 			Assert::That(r.match(ctx));
 	}
 
+	Spec(ExprRuleCanMatchComplexBinop) {
+			proton::parser::expr r;
+			proton::string input("16*2/3+9-18&6|31^4");
+			auto ctx = proton::parser::context(*input.iterator());
+			auto n = r.match(ctx);
+
+			Assert::That(n);
+	}
+
+
 
 
 

@@ -1,7 +1,9 @@
 
 SHELL_OBJS = src/shell/main.o
 TEST_OBJS  = src/tests/main.o
-CORE_OBJS  = src/core/object.o src/core/singletons.o src/core/string.o src/parser/rule.o
+CORE_OBJS  = src/core/object.o src/core/singletons.o src/core/string.o src/core/protocol.o \
+			 src/core/jitter-binops.o src/core/proto-binops.o \
+             src/parser/rule.o src/parser/ast.o
 
 GC_LIBS  = -Ldeps/gc-7.1/.libs -lgc -lgccpp
 JIT_LIBS = -Ldeps/libjit-0.1.2/jit/.libs -ljit 
@@ -17,7 +19,7 @@ INC_FLAGS = -Isrc/core -Isrc/parser -Ideps/gc-7.1/include -Ideps/libjit-0.1.2/in
 all: proton
 
 binops:
-	python src/core/gen_binops.py src/core/proto-binops.h src/core/jitter-binops.h src/tests/jit_int_test.h
+	python src/core/gen_binops.py src/core/proto-binops src/core/jitter-binops src/tests/jit_int_test.h
 
 test_objects: $(TEST_OBJS) $(CORE_OBJS)  
 	g++ -g -oproton_test $(TEST_OBJS) $(CORE_OBJS) $(LIBS)
