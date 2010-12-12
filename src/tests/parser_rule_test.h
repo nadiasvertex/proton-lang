@@ -118,9 +118,36 @@ Context(BasicRules)
 			Assert::That(n);
 	}
 
+	Spec(ExprRuleCanMatchAndCompileComplexBinop) {
+			proton::parser::expr r;
+			proton::string input("16*2/3+9-18&6|31^4");
+			auto pctx = proton::parser::context(*input.iterator());
+			auto n = r.match(pctx);
 
+			if (n)
+			{
+				auto ctx = new proton::context();
+				auto f = new proton::function(ctx);
+				auto j = new proton::jitter(f);
 
+				j->start();
+				j->prologue();
+				auto result = n->compile(j);
+				j->ret(result);
+				f->compile();
+				j->end();
 
+				 // Create closure to call the function.
+				auto c = new proton::closure();
+
+				// Call the function and see what happens!
+				auto call_result = f->apply(c);
+
+				auto result_as_integer = (proton::integer*)call_result;
+
+				Assert::That(result_as_integer->get_int64(), Is().EqualTo(16*2/3+9-18&6|31^4));
+			}
+	}
 
 
 };

@@ -25,7 +25,7 @@ test_objects: $(TEST_OBJS) $(CORE_OBJS)
 	g++ -g -oproton_test $(TEST_OBJS) $(CORE_OBJS) $(LIBS)
 	
 shell_objects:  $(SHELL_OBJS) $(CORE_OBJS)
-	g++ -oproton  $< $(LIBS)
+	g++ -oproton  $< $(LIBS) -lreadline
 
 test: INCLUDES = $(INC_FLAGS) -Ideps/igloo
 test: binops test_objects

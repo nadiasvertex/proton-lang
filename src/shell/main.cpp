@@ -1,5 +1,12 @@
 #include <proton.h>
 #include <iostream>
+#include <readline/readline.h>
+
+void eval(char* line) {
+	proton::python_parser p;
+
+
+}
 
 
 int main(int argc, char **argv)
@@ -10,7 +17,11 @@ int main(int argc, char **argv)
 
 	auto ctx = new proton::context();
 
-
+	while(true) {
+		// Go into the interactive loop.
+		auto line = readline(">>> ");
+		eval(line);
+	}
 
 	return 0;
 }
