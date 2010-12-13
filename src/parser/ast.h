@@ -104,10 +104,73 @@ class binop: public base {
 	wchar op;
 	base* left;
 	base* right;
+
+	static std::map<wchar, int> prec_map;
+	static bool initialized;
+
+	void initialize() {
+		if (!initialized) {
+			initialized = true;
+
+			prec_map['*'] = 60;
+			prec_map['/'] = 60;
+			prec_map['%'] = 60;
+
+			prec_map['+'] = 50;
+			prec_map['-'] = 50;
+
+			prec_map['l'] = 40; // left shift
+			prec_map['r'] = 40; // right shift
+
+			prec_map['|'] = 30;
+			prec_map['&'] = 30;
+			prec_map['^'] = 30;
+		}
+	}
+
+	/// To properly solve order of operations, we have to adjust the
+	/// parse tree.  This operation makes higher precedence operations
+	/// deeper in the tree (so they happen first.)
+	void rotate(binop* r) {
+		/* Consider 5*6+2.  The parser will generate a tree that looks like
+		 * this:
+		 *
+		 *                 *
+		 *                / \
+		 *               5   +
+		 *                  / \
+		 *                 6   2
+		 *
+		 *  That's clearly wrong, since the addition will be performed first.  What we want to see is:
+		 *
+		 *                 +
+		 *                / \
+		 *               *   2
+		 *              / \
+		 *             5   6
+		 *
+		 *  This will result in the correct behavior in a depth-first translation system.  So we rotate
+		 *  the '+' and '*' nodes with respect to each other.
+		 */
+
+		auto tmp_r = r->right;
+		auto tmp_op = r->op;
+
+		r->op=op;
+		r->right=r->left;
+		r->left = left;
+
+		op = tmp_op;
+		left = r;
+		right = tmp_r;
+
+
+	}
 public:
-	binop() {}
+	binop() {initialize();}
 
 	binop(wchar _op, base* l, base* r) : op(_op) {
+		initialize();
 		set_left(l);
 		set_right(r);
 	}
@@ -119,7 +182,20 @@ public:
 
 	void set_right(base *r) {
 		right = r;
-		if (r) r->set_parent(this);
+		r->set_parent(this);
+	}
+
+	void check_precedence() {
+		auto rb = dynamic_cast<binop*>(right);
+
+		if (right && rb)  {
+			// Figure out if we need to adjust the association depending on the
+			// operation.
+			if (prec_map[op] > prec_map[rb->op]) {
+				rotate(rb);
+			}
+		}
+
 	}
 
 	/// Compile this node into the jit.

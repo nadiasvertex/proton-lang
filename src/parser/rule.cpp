@@ -128,7 +128,10 @@ ast::base* expr::do_match(context& ctx) {
 	binop binop_rule;
 	auto n = binop_rule.match(ctx);
 	if (n!=NULL) {
-		((ast::binop*)n)->set_left(l);
+		auto an = ((ast::binop*)n);
+		an->set_left(l);
+		an->check_precedence();
+
 		return n;
 	}
 
