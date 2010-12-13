@@ -10,7 +10,7 @@ class python_parser: public gc {
 
 public:
 
-	bool eval(context* ctx, char* line);
+	object* eval(context* ctx, char* line);
 };
 
 }

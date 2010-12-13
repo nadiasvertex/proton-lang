@@ -3,7 +3,7 @@ SHELL_OBJS = src/shell/main.o
 TEST_OBJS  = src/tests/main.o
 CORE_OBJS  = src/core/object.o src/core/singletons.o src/core/string.o src/core/protocol.o \
 			 src/core/jitter-binops.o src/core/proto-binops.o \
-             src/parser/rule.o src/parser/ast.o
+             src/parser/parser.o src/parser/rule.o src/parser/ast.o
 
 GC_LIBS  = -Ldeps/gc-7.1/.libs -lgc -lgccpp
 JIT_LIBS = -Ldeps/libjit-0.1.2/jit/.libs -ljit 
@@ -25,7 +25,7 @@ test_objects: $(TEST_OBJS) $(CORE_OBJS)
 	g++ -g -oproton_test $(TEST_OBJS) $(CORE_OBJS) $(LIBS)
 	
 shell_objects:  $(SHELL_OBJS) $(CORE_OBJS)
-	g++ -oproton  $< $(LIBS) -lreadline
+	g++ -oproton $(SHELL_OBJS) $(CORE_OBJS) $(LIBS) -lreadline
 
 test: INCLUDES = $(INC_FLAGS) -Ideps/igloo
 test: binops test_objects

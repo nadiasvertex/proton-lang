@@ -112,6 +112,8 @@ class binop: public base {
 		if (!initialized) {
 			initialized = true;
 
+			prec_map['p'] = 70; // power
+
 			prec_map['*'] = 60;
 			prec_map['/'] = 60;
 			prec_map['%'] = 60;
@@ -163,9 +165,8 @@ class binop: public base {
 		op = tmp_op;
 		left = r;
 		right = tmp_r;
-
-
 	}
+
 public:
 	binop() {initialize();}
 
