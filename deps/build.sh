@@ -1,5 +1,5 @@
 # Compile libjit
-cd libjit-0.1.0
+cd libjit-0.1.2
 sh configure --disable-shared --enable-static --with-pic && make clean && make all
 cd ..
 
