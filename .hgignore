@@ -4,7 +4,6 @@ syntax: glob
 *.la
 *.lo
 *.texi
-deps/*
 */dpas/*
 proton_test
 proton
