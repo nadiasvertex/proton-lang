@@ -1,0 +1,1 @@
+Uses libjit to convert Python directly into machine code. The Python RTE is implemented in C++ and the dispatch loop is implemented as machine code compiled by libjit.
